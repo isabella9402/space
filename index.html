@@ -11,21 +11,21 @@
    단일 HTML 파일 · Canvas 2D + 이모지 · 한국어 UI · WebAudio 사운드
    ======================================================================== */
 :root{
-  --cream:#F4EAD5;   /* 한지 크림 */
-  --green:#3E6B5C;   /* 한옥 기와 초록 */
-  --green-d:#2f5346;
-  --green-l:#5a8a78;
-  --red:#C0392B;     /* 고추장 빨강 */
-  --red-l:#e05a4b;
-  --yellow:#E8A32C;  /* 나물 노랑 */
-  --ink:#2b2320;
-  --bg:#1c1714;
-  --panel:rgba(244,234,213,0.92);
+  --cream:#e6eeff;   /* 별빛 텍스트 */
+  --green:#2f6df0;   /* 코발트 패널 라인/버튼 */
+  --green-d:#7cc4ff; /* 밝은 시안(패널 위 텍스트/네온 그림자) */
+  --green-l:#57b6ff;
+  --red:#ff3ea5;     /* 플라즈마 마젠타 */
+  --red-l:#ff77c9;
+  --yellow:#37e6ff;  /* 에너지 시안 */
+  --ink:#dbe6ff;
+  --bg:#05060f;      /* 심우주 */
+  --panel:rgba(10,16,40,0.92);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;}
 body{
-  background:radial-gradient(circle at 50% 30%, #2a221d 0%, var(--bg) 70%);
+  background:radial-gradient(circle at 50% 25%, #101a3a 0%, var(--bg) 70%);
   font-family:'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic','Segoe UI',system-ui,sans-serif;
   color:var(--ink);
   display:flex;align-items:center;justify-content:center;
@@ -36,10 +36,10 @@ body{
   position:relative;
   width:min(100vw, 56.25vh);
   height:min(177.78vw, 100vh);
-  background:linear-gradient(180deg,#4a3f36 0%, #3a322b 100%);
+  background:linear-gradient(180deg,#0a1230 0%, #060a1c 100%);
   display:flex;flex-direction:column;
   overflow:hidden;
-  box-shadow:0 0 40px rgba(0,0,0,0.6), inset 0 0 0 2px rgba(232,163,44,0.25);
+  box-shadow:0 0 44px rgba(30,80,200,0.35), inset 0 0 0 2px rgba(55,230,255,0.28);
   border-radius:14px;
 }
 /* ---------- HUD (상단 ~13%) ---------- */
@@ -57,14 +57,14 @@ body{
 #score-wrap b{color:var(--red);font-variant-numeric:tabular-nums;}
 .dish-row{display:flex;align-items:center;gap:8px;}
 #dish{font-size:clamp(12px,3.2vw,18px);font-weight:800;color:var(--green-d);white-space:nowrap;}
-#bar{flex:1;height:14px;background:rgba(62,107,92,0.2);border-radius:8px;overflow:hidden;border:1px solid rgba(62,107,92,.35);}
+#bar{flex:1;height:14px;background:rgba(47,109,240,0.18);border-radius:8px;overflow:hidden;border:1px solid rgba(55,230,255,.35);}
 #bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--yellow),var(--red-l));transition:width .18s ease;border-radius:8px;}
 #bar-txt{font-size:clamp(11px,2.9vw,16px);font-weight:800;color:var(--green-d);font-variant-numeric:tabular-nums;min-width:42px;text-align:right;}
 #combo{font-size:clamp(10px,2.6vw,14px);color:var(--red);font-weight:800;opacity:0;transition:opacity .2s;}
 #combo.on{opacity:1;}
 /* ---------- Stage (미궁, 가운데) ---------- */
 #stage{flex:1 1 auto;position:relative;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(180deg,#efe3c8,#e7d8b6);overflow:hidden;}
+  background:linear-gradient(180deg,#070b1c,#04060f);overflow:hidden;}
 #cv{display:block;image-rendering:auto;}
 /* ---------- 컨트롤 (하단 ~12%) ---------- */
 #ctrl{
@@ -82,20 +82,20 @@ body{
 #mute-btn{left:12px;}
 #pause-btn{right:12px;}
 #power-btn{
-  width:clamp(90px,38%,170px);height:clamp(44px,80%,60px);border-radius:32px;border:none;cursor:pointer;
+  width:clamp(90px,38%,170px);height:clamp(44px,80%,60px);border-radius:32px;border:none;cursor:pointer;white-space:nowrap;
   background:linear-gradient(180deg,var(--red-l),var(--red));color:#fff;
   font-size:clamp(14px,3.8vw,19px);font-weight:800;letter-spacing:.5px;
   display:flex;align-items:center;justify-content:center;gap:8px;
-  box-shadow:0 4px 0 #8f271c, 0 0 20px rgba(224,90,75,.5);
+  box-shadow:0 4px 0 #7a1a52, 0 0 20px rgba(255,62,165,.5);
   transition:filter .15s, opacity .15s;
 }
-#power-btn:active{transform:translateY(2px);box-shadow:0 2px 0 #8f271c;}
+#power-btn:active{transform:translateY(2px);box-shadow:0 2px 0 #7a1a52;}
 #power-btn.empty{filter:grayscale(.85) brightness(.8);opacity:.55;box-shadow:0 4px 0 #555;}
 #power-btn.ready{animation:glow 1s ease-in-out infinite;}
-@keyframes glow{0%,100%{box-shadow:0 4px 0 #8f271c,0 0 12px rgba(224,90,75,.5);}50%{box-shadow:0 4px 0 #8f271c,0 0 26px rgba(232,163,44,.9);}}
+@keyframes glow{0%,100%{box-shadow:0 4px 0 #7a1a52,0 0 12px rgba(255,62,165,.5);}50%{box-shadow:0 4px 0 #7a1a52,0 0 26px rgba(55,230,255,.9);}}
 #ability{display:flex;align-items:center;gap:10px;}
 .salt-btn{
-  height:clamp(44px,80%,60px);min-width:clamp(52px,16%,80px);padding:0 10px;border-radius:32px;border:none;cursor:pointer;
+  height:clamp(44px,80%,60px);min-width:clamp(60px,18%,92px);padding:0 12px;border-radius:32px;border:none;cursor:pointer;white-space:nowrap;
   background:linear-gradient(180deg,#eef3fb,#a9b6c6);color:#2b3550;
   font-size:clamp(11px,3vw,15px);font-weight:800;display:flex;align-items:center;justify-content:center;gap:5px;
   box-shadow:0 4px 0 #6f7c90;transition:filter .15s,opacity .15s;
@@ -108,7 +108,7 @@ body{
 /* ---------- 오버레이 ---------- */
 .overlay{
   position:absolute;inset:0;z-index:10;
-  background:rgba(28,23,20,0.82);backdrop-filter:blur(3px);
+  background:rgba(4,6,15,0.86);backdrop-filter:blur(3px);
   display:none;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;padding:24px;color:var(--cream);gap:14px;
 }
@@ -119,22 +119,22 @@ body{
 .overlay .big-emoji{font-size:clamp(56px,17vw,110px);line-height:1;filter:drop-shadow(0 6px 10px rgba(0,0,0,.4));}
 .overlay .stat{font-size:clamp(15px,4.2vw,22px);font-weight:700;}
 .overlay .stat b{color:var(--yellow);}
-.overlay .best{font-size:clamp(13px,3.4vw,17px);color:#cbb995;}
+.overlay .best{font-size:clamp(13px,3.4vw,17px);color:#8fb3e8;}
 .btn{
   margin-top:6px;padding:14px 34px;border:none;border-radius:40px;cursor:pointer;
-  background:linear-gradient(180deg,var(--yellow),#c9861f);color:#3a2a10;
+  background:linear-gradient(180deg,var(--yellow),#0f9dc4);color:#04121f;
   font-size:clamp(16px,4.6vw,22px);font-weight:800;letter-spacing:1px;
-  box-shadow:0 5px 0 #9a6812;
+  box-shadow:0 5px 0 #0a6f8c;
 }
-.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #9a6812;}
-.hint{font-size:clamp(11px,3vw,15px);color:#cbb995;line-height:1.6;margin-top:2px;}
-.hint kbd{background:rgba(244,234,213,.16);border:1px solid rgba(244,234,213,.3);border-radius:5px;padding:1px 7px;font-family:inherit;}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #0a6f8c;}
+.hint{font-size:clamp(11px,3vw,15px);color:#8fb3e8;line-height:1.6;margin-top:2px;}
+.hint kbd{background:rgba(120,180,255,.14);border:1px solid rgba(120,180,255,.3);border-radius:5px;padding:1px 7px;font-family:inherit;}
 #cook .potwrap{position:relative;}
 #cook .steam{position:absolute;top:-10px;left:50%;font-size:clamp(28px,8vw,52px);}
-.perfect{color:#ffe08a !important;text-shadow:0 0 14px rgba(255,224,138,.9);font-weight:800;}
-#cook-bar{width:min(72%,260px);height:12px;background:rgba(244,234,213,.2);border-radius:8px;overflow:hidden;}
+.perfect{color:#baf4ff !important;text-shadow:0 0 14px rgba(55,230,255,.9);font-weight:800;}
+#cook-bar{width:min(72%,260px);height:12px;background:rgba(120,180,255,.15);border-radius:8px;overflow:hidden;}
 #cook-bar > i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--yellow),var(--red-l));}
-.credit{position:absolute;bottom:10px;font-size:11px;color:#8a7a63;}
+.credit{position:absolute;bottom:10px;font-size:11px;color:#5f79b0;}
 @media (orientation:landscape) and (max-height:520px){
   #rotate{display:flex;}
 }
@@ -147,12 +147,12 @@ body{
   <!-- 상단 HUD -->
   <div id="hud">
     <div class="hud-row">
-      <div id="lives">❤️❤️❤️</div>
+      <div id="lives">🚀🚀🚀</div>
       <div id="timer">02:00</div>
       <div id="score-wrap">점수 <b id="score">0</b></div>
     </div>
     <div class="hud-row dish-row">
-      <div id="dish">🍲 김치</div>
+      <div id="dish">⚡ 에너지 코어</div>
       <div id="bar"><div id="bar-fill"></div></div>
       <div id="bar-txt">0/8</div>
       <div id="combo">콤보 x2.0!</div>
@@ -166,21 +166,21 @@ body{
   <div id="ctrl">
     <button id="mute-btn" class="icon-btn" title="소리">🔊</button>
     <div id="ability">
-      <button id="power-btn" class="empty"><span id="power-ic">🌶️</span><span id="power-label">파워</span></button>
-      <button id="salt-btn" class="salt-btn empty" title="소금 · 귀신 묶기"><span id="salt-ic">🧂</span><span id="salt-label">소금</span></button>
+      <button id="power-btn" class="empty"><span id="power-ic">💥</span><span id="power-label">파워</span></button>
+      <button id="salt-btn" class="salt-btn empty" title="정지장 · 유령 정지"><span id="salt-ic">❄️</span><span id="salt-label">정지</span></button>
     </div>
     <button id="pause-btn" class="icon-btn" title="일시정지">⏸️</button>
   </div>
 
   <!-- 오버레이: 메인 메뉴 -->
   <div class="overlay show" id="menu">
-    <div class="big-emoji">🍲👻</div>
-    <h1>부엌 귀신</h1>
-    <div class="sub">Kitchen Gwisin<br>귀신이 깃든 한옥 부엌에서<br>동트기 전에 완벽한 한식을 완성하세요!</div>
+    <div class="big-emoji">🛸👾</div>
+    <h1>우주 미로</h1>
+    <div class="sub">COSMIC MAZE<br>유령이 떠도는 우주 정거장에서<br>초신성이 터지기 전에 에너지 코어를 모으세요!</div>
     <button class="btn" id="start-btn">시작 ▶</button>
     <div class="best">최고 점수 <b id="menu-best">0</b></div>
-    <div class="hint">🌶️ 김치 파워로 귀신 사냥 · 🧂 소금 뿌려 귀신 묶기<br>🔥 아궁이로 순간이동 · 🥮 황금 간식 = 큰 점수+시간<br>👻 처녀귀신은 앞길을 가로막아요!<br>📱 스와이프 이동 · 💻 <kbd>WASD</kbd> 이동 · <kbd>Space</kbd> 파워 · <kbd>F</kbd> 소금 · <kbd>Esc</kbd> 일시정지</div>
-    <div class="credit">v1.1 · 창작 확장판</div>
+    <div class="hint">💥 플라즈마 파워로 유령 사냥 · ❄️ 정지장으로 유령 정지<br>🌀 웜홀로 순간이동 · 🛰️ 보급 위성 = 큰 점수+시간<br>👾 유령 우주선은 앞길을 가로막아요!<br>📱 스와이프 이동 · 💻 <kbd>WASD</kbd> 이동 · <kbd>Space</kbd> 파워 · <kbd>F</kbd> 정지 · <kbd>Esc</kbd> 일시정지</div>
+    <div class="credit">v2.0 · 우주 테마</div>
   </div>
 
   <!-- 오버레이: 일시정지 -->
@@ -192,20 +192,20 @@ body{
 
   <!-- 오버레이: 요리 중 -->
   <div class="overlay" id="cook">
-    <div class="potwrap"><div class="steam" id="cook-steam">♨️</div><div class="big-emoji" id="cook-pot">🍲</div></div>
-    <h2 id="cook-title">요리 중...</h2>
-    <div class="sub" id="cook-dish">김치 완성!</div>
-    <div class="stat perfect" id="cook-perfect" style="display:none">✨ 완벽한 요리! +250</div>
+    <div class="potwrap"><div class="steam" id="cook-steam">💫</div><div class="big-emoji" id="cook-pot">🛸</div></div>
+    <h2 id="cook-title">코어 충전 중...</h2>
+    <div class="sub" id="cook-dish">에너지 코어 확보!</div>
+    <div class="stat perfect" id="cook-perfect" style="display:none">✨ 완벽한 확보! +250</div>
     <div id="cook-bar"><i></i></div>
   </div>
 
   <!-- 오버레이: 게임 오버 -->
   <div class="overlay" id="over">
-    <div class="big-emoji">🌙</div>
+    <div class="big-emoji">🌌</div>
     <h2>게임 오버</h2>
-    <div class="sub" id="over-reason">동이 트기 전에 쓰러졌어요...</div>
+    <div class="sub" id="over-reason">임무 실패...</div>
     <div class="stat">점수 <b id="over-score">0</b></div>
-    <div class="stat">완성한 요리 <b id="over-dishes">0</b>접시</div>
+    <div class="stat">확보한 코어 <b id="over-dishes">0</b>개</div>
     <div class="best" id="over-best">최고 점수 0</div>
     <button class="btn" id="again-btn">다시 하기 🔁</button>
   </div>
@@ -225,10 +225,10 @@ body{
    0. 상수 / 팔레트
    ======================================================================= */
 const COL = {
-  cream:'#F4EAD5', green:'#3E6B5C', greenD:'#2f5346', greenL:'#5a8a78',
-  red:'#C0392B', redL:'#e05a4b', yellow:'#E8A32C', ink:'#2b2320',
-  ghostWhite:'#f7f2e6', ghostRed:'#d6473a', frightened:'#5577c9', frightenedPale:'#9fb4e8',
-  eyeWhite:'#ffffff', eyePupil:'#243149'
+  cream:'#e6eeff', green:'#182247', greenD:'#0e173c', greenL:'#3a6df0',
+  red:'#ff3ea5', redL:'#ff77c9', yellow:'#37e6ff', ink:'#dbe6ff',
+  ghostWhite:'#bfe6ff', ghostRed:'#ff5a6e', frightened:'#2b46c8', frightenedPale:'#7f9cf0',
+  eyeWhite:'#ffffff', eyePupil:'#0b1330'
 };
 const CFG = {
   playerSpeed: 5.4,        // 셀/초
@@ -247,19 +247,29 @@ const CFG = {
   bonusLife: 9.0,          // 황금 간식 체류 시간(초)
   bonusFirst: 14,          // 첫 간식 등장까지(초)
   bonusEvery: 26,          // 이후 재등장 간격(초)
-  bonusTime: 4             // 간식 획득 시 시간 보너스(초)
+  bonusTime: 4,            // 간식 획득 시 시간 보너스(초)
+  magnetRadius: 2.4,       // 자기장 흡입 반경(셀)
+  magnetSpeed: 7,          // 자기장 흡입 속도(셀/초)
+  warpBoost: 0.9,          // 웜홀 통과 후 부스트 지속(초)
+  warpBoostMult: 1.6,      // 부스트 속도 배수
+  nearMissBonus: 30,       // 니어미스 보너스 점수
+  nearMissCd: 1.1,         // 니어미스 재판정 쿨다운(초)
+  meteorFirst: 16,         // 첫 유성까지(초)
+  meteorEvery: 20,         // 유성 재등장 간격(초)
+  meteorWarn: 1.1,         // 유성 경고 시간(초)
+  meteorSpeed: 24          // 유성 진행 속도(셀/초)
 };
 const DISHES = [
-  {name:'김치',    emoji:'🥬', pot:'🍲'},
-  {name:'떡볶이',  emoji:'🍢', pot:'🥘'},
-  {name:'비빔밥',  emoji:'🍚', pot:'🥣'},
-  {name:'불고기',  emoji:'🥩', pot:'🍳'}
+  {name:'에너지 코어', emoji:'⚡', pot:'🛸'},
+  {name:'별 조각',     emoji:'✨', pot:'🌌'},
+  {name:'중력 결정',   emoji:'💎', pot:'🪐'},
+  {name:'반물질',      emoji:'🔮', pot:'🚀'}
 ];
-// 황금 간식(움직이는 보너스) 후보
+// 움직이는 보너스(보급품) 후보
 const TREATS = [
-  {name:'약과', emoji:'🥮'},
-  {name:'경단', emoji:'🍡'},
-  {name:'만두', emoji:'🥟'}
+  {name:'보급 위성', emoji:'🛰️'},
+  {name:'운석',     emoji:'☄️'},
+  {name:'별똥별',   emoji:'🌠'}
 ];
 const DIRS = [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}];
 
@@ -322,6 +332,8 @@ const Sound = (function(){
   function warp(){ tone(320,{dur:0.16,type:'sine',vol:0.16,slideTo:960}); tone(620,{dur:0.16,type:'triangle',vol:0.09,slideTo:1500,delay:0.02}); }
   function salt(){ [1300,1600,1950].forEach((f,i)=>tone(f,{dur:0.07,type:'square',vol:0.13,delay:i*0.05})); tone(420,{dur:0.5,type:'sine',vol:0.11,slideTo:190}); }
   function bonus(){ [523,659,784,1047,1319].forEach((f,i)=>tone(f,{dur:0.12,type:'triangle',vol:0.2,delay:i*0.06})); }
+  function meteor(){ tone(900,{dur:0.4,type:'sawtooth',vol:0.16,slideTo:120}); tone(500,{dur:0.4,type:'square',vol:0.08,slideTo:80,delay:0.02}); }
+  function near(){ tone(1500,{dur:0.06,type:'sine',vol:0.12,slideTo:2200}); }
   // --- BGM (룩어헤드 스케줄러) ---
   function stepSeconds(){ return fast ? 0.20 : 0.25; } // 8분음표 간격
   function playNote(idx,t){
@@ -346,7 +358,7 @@ const Sound = (function(){
   function stopBGM(){ bgmActive=false; if(bgmTimer){clearTimeout(bgmTimer);bgmTimer=null;} }
   function setFast(f){ fast=f; }
   function toggleMute(){ muted=!muted; if(master) master.gain.value=muted?0:0.6; return muted; }
-  return {resume,eat,kimchiPick,power,ghost,hit,dish,over,levelUp,warp,salt,bonus,startBGM,stopBGM,setFast,toggleMute,
+  return {resume,eat,kimchiPick,power,ghost,hit,dish,over,levelUp,warp,salt,bonus,meteor,near,startBGM,stopBGM,setFast,toggleMute,
           get muted(){return muted;}, get ready(){return !!ctx;}};
 })();
 
@@ -459,7 +471,25 @@ let VIEW={w:0,h:0,cs:0,ox:0,oy:0,dpr:1};
 let maze=null, cfg=null, dish=null;
 let cols=0, rows=0;
 let player=null, enemies=[], ingredients=[], kimchis=[], particles=[];
-let salts=[], warps=[], warpMap=null, bonus=null;
+let salts=[], warps=[], warpMap=null, bonus=null, stars=[], meteor=null;
+// --- FX (게임 필 / 몰입 연출) ---
+let shakeAmt=0, flashCol='#000', flashA=0, hitStop=0, trail=[], shockwaves=[], trailT=0;
+const REDUCE = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+function addShake(v){ if(REDUCE) return; shakeAmt=Math.min(16, shakeAmt+v); }
+function addFlash(col,a){ flashCol=col; flashA=Math.max(flashA, REDUCE? a*0.35 : a); }
+function addHitStop(t){ if(REDUCE) return; hitStop=Math.max(hitStop,t); }
+function addShock(x,y,c,max){ if(REDUCE) return; shockwaves.push({x,y,r:0.25,max:max||3.2,life:0.5,maxLife:0.5,c}); }
+function resetFX(){ shakeAmt=0; flashA=0; hitStop=0; trail.length=0; shockwaves.length=0; trailT=0; }
+function updateFX(dt){
+  if(shakeAmt>0) shakeAmt=Math.max(0, shakeAmt - dt*42);
+  if(flashA>0) flashA=Math.max(0, flashA - dt*2.4);
+  for(let i=shockwaves.length-1;i>=0;i--){ const s=shockwaves[i]; s.life-=dt; s.r+=dt*(s.max/s.maxLife); if(s.life<=0) shockwaves.splice(i,1); }
+  for(let i=trail.length-1;i>=0;i--){ trail[i].life-=dt; if(trail[i].life<=0) trail.splice(i,1); }
+  if(!REDUCE && G.state==='playing' && player && (player.dir.x||player.dir.y)){
+    trailT-=dt;
+    if(trailT<=0){ trailT=0.028; trail.push({x:player.x,y:player.y,life:0.26,max:0.26}); if(trail.length>16) trail.shift(); }
+  }
+}
 let startCell={x:1,y:1}, homeCell={x:1,y:1}, homeSlots=[];
 let G = {
   state:'menu',       // menu | playing | cooking | paused | over
@@ -467,6 +497,7 @@ let G = {
   need:8, got:0,
   kimchiSlot:false, frightened:0, frightChain:0,
   saltSlot:false, freeze:0, bonusCd:0,
+  boost:0, slowmo:0, stun:0, nearCd:0, meteorCd:0,
   invuln:0, comboMult:1, comboTimer:0,
   hitThisLevel:false, dishesDone:0, cookTimer:0, cookPerfect:false,
   time:0
@@ -569,9 +600,16 @@ function loadLevel(n){
 
   G.frightened=0; G.frightChain=0; G.invuln=0; G.comboMult=1; G.comboTimer=0;
   G.freeze=0; bonus=null; G.bonusCd=CFG.bonusFirst;
+  meteor=null; G.meteorCd=CFG.meteorFirst; G.boost=0; G.slowmo=0; G.stun=0; G.nearCd=0;
   G.hitThisLevel=false; G.timeLeft=cfg.time;
   Sound.setFast(false);
-  particles.length=0;
+  particles.length=0; resetFX();
+  // 별밭 생성(복도 배경)
+  stars=[]; const nStars=Math.floor(cols*rows*0.55);
+  for(let i=0;i<nStars;i++){
+    stars.push({x:rnd(cols), y:rnd(rows), r:0.4+rnd(1.1), ph:rnd(6.28), tw:1.4+rnd(2.4),
+      c: rnd()<0.72 ? '#dfefff' : (rnd()<0.5?'#8fd4ff':'#ffcf8f')});
+  }
   computeView();
 }
 function cornerDist(c,corners){ let m=1e9; for(const [x,y] of corners) m=Math.min(m,manh(c.x,c.y,x,y)); return m; }
@@ -603,7 +641,9 @@ function tryWarp(e){
     if(e._warpFrom!==k){            // 방금 이 아궁이로 나온 게 아니면 → 순간이동
       e.x=partner.x; e.y=partner.y;
       e._warpFrom=partner.x+','+partner.y;
-      if(e===player){ Sound.warp(); spawnSmoke(player.x,player.y); }
+      if(e===player){ Sound.warp(); spawnSmoke(player.x,player.y);
+        G.boost=CFG.warpBoost; G.invuln=Math.max(G.invuln,0.5);   // 웜홀 슬링샷: 부스트+짧은 무적
+        addShake(4); addShock(player.x,player.y,'#b46bff',3.2); }
       else spawnPop(e.x,e.y,COL.greenL);
     }
   } else {
@@ -696,12 +736,16 @@ function update(dt){
   // 타이머
   G.timeLeft-=dt;
   if(G.timeLeft<=20 && !Sound.muted) Sound.setFast(true);
+  if(G.timeLeft<=8) addShake((8-G.timeLeft)/8*0.9);   // 초신성 임박 진동
   if(G.timeLeft<=0){ G.timeLeft=0; return gameOver('time'); }
 
-  // 콤보
+  // 콤보 / 타이머
   if(G.comboTimer>0){ G.comboTimer-=dt; if(G.comboTimer<=0) G.comboMult=1; }
   if(G.invuln>0) G.invuln-=dt;
-  if(G.freeze>0) G.freeze-=dt;   // 소금: 귀신 묶기
+  if(G.freeze>0) G.freeze-=dt;   // 정지장: 유령 정지
+  if(G.boost>0) G.boost-=dt;     // 웜홀 부스트
+  if(G.stun>0) G.stun-=dt;       // 유성 피격 경직
+  if(G.nearCd>0) G.nearCd-=dt;
 
   // 김치 파워
   if(G.frightened>0){
@@ -709,20 +753,31 @@ function update(dt){
     if(G.frightened<=0){ enemies.forEach(e=>{ if(!e.eaten) e.frightened=false; }); G.frightChain=0; }
   }
 
+  // 유성 (스테이지 2+)
+  if(cfg.level>=2) updateMeteor(dt);
+
   // 플레이어
   player.t+=dt;
+  player.speed = CFG.playerSpeed * (G.boost>0 ? CFG.warpBoostMult : 1);  // 웜홀 부스트
   const moving=(player.dir.x||player.dir.y);
   player.mouth = moving ? (Math.sin(player.t*16)*0.5+0.5) : 0.06;
   if(moving) player.face=Math.atan2(player.dir.y,player.dir.x);
-  stepEntity(player,dt,decidePlayer);
+  if(G.stun>0){ player.dir={x:0,y:0}; player.wish=null; }   // 유성에 맞아 경직
+  else stepEntity(player,dt,decidePlayer);
 
-  // 수집: 일반 재료
+  // 자기장 흡입: 플라즈마 파워 중 근처 에너지 셀을 함선으로 끌어당김
+  if(G.frightened>0){
+    for(const g of ingredients){
+      const dx=player.x-g.x, dy=player.y-g.y, d=Math.hypot(dx,dy);
+      if(d>0.001 && d<CFG.magnetRadius){ const s=Math.min(d, CFG.magnetSpeed*dt*(1.2-d/CFG.magnetRadius));
+        g.x+=dx/d*s; g.y+=dy/d*s; }
+    }
+  }
+
+  // 수집: 에너지 셀 (거리 기반 → 자기장 흡입 지원)
   for(let i=ingredients.length-1;i>=0;i--){
     const g=ingredients[i];
-    if(manh(Math.round(player.x),Math.round(player.y),g.x,g.y)===0 &&
-       Math.hypot(player.x-g.x,player.y-g.y)<CFG.eatDist){
-      ingredients.splice(i,1); collectIngredient(g);
-    }
+    if(Math.hypot(player.x-g.x,player.y-g.y)<CFG.eatDist){ ingredients.splice(i,1); collectIngredient(g); }
   }
   // 수집: 김치 파워
   for(let i=kimchis.length-1;i>=0;i--){
@@ -772,12 +827,16 @@ function update(dt){
     }
   }
 
-  // 충돌
+  // 충돌 + 니어미스(아슬아슬 회피)
+  const pmoving=(player.dir.x||player.dir.y);
   for(const e of enemies){
     if(e.eaten) continue;
-    if(Math.hypot(player.x-e.x,player.y-e.y) < CFG.eatDist){
+    const d=Math.hypot(player.x-e.x,player.y-e.y);
+    if(d < CFG.eatDist){
       if(e.frightened){ eatGhost(e); }
-      else if(G.invuln<=0 && G.freeze<=0){ hitPlayer(); break; }  // 묶인 동안엔 안전
+      else if(G.invuln<=0 && G.freeze<=0 && G.stun<=0){ hitPlayer(); break; }  // 정지장/경직 중엔 안전
+    } else if(!e.frightened && d<0.95 && pmoving && G.invuln<=0 && G.freeze<=0 && G.nearCd<=0){
+      nearMiss(e);
     }
   }
 
@@ -812,11 +871,13 @@ function eatGhost(e){
   Sound.ghost(G.frightChain);
   spawnSmoke(e.x,e.y);
   floatText(e.x,e.y,'+'+pts,COL.yellow);
+  addShake(5+G.frightChain); addHitStop(0.07); addShock(e.x,e.y,'#7ff0ff',2.6); addFlash('#37e6ff',0.12);
 }
 function hitPlayer(){
   G.lives--; G.hitThisLevel=true; G.comboMult=1; G.comboTimer=0;
   Sound.hit();
   spawnBurst(player.x,player.y,COL.red);
+  addShake(14); addFlash('#ff3c5a',0.55); addHitStop(0.12); addShock(player.x,player.y,'#ff5a6e',3.4);
   if(G.lives<=0){ return gameOver('dead'); }
   resetPositions();
   G.invuln=CFG.invuln;
@@ -840,6 +901,7 @@ function activatePower(){
   enemies.forEach(e=>{ if(!e.eaten){ e.frightened=true; e.dir={x:-e.dir.x,y:-e.dir.y}; e.path=[]; } });
   Sound.power();
   spawnBurst(player.x,player.y,COL.red);
+  addShake(7); addFlash('#ff3ea5',0.32); addShock(player.x,player.y,'#ff3ea5',4.2);
 }
 // 소금 부적: 모든 귀신을 잠시 그 자리에 묶는다(먹지는 못함 · 순수 방어)
 function activateSalt(){
@@ -849,6 +911,7 @@ function activateSalt(){
   Sound.salt();
   for(let i=0;i<16;i++){ const a=i/16*6.283;
     particles.push({x:player.x,y:player.y,vx:Math.cos(a)*2.2,vy:Math.sin(a)*2.2,life:.5,max:.5,c:'#ffffff',r:2.5,g:0}); }
+  addShake(4); addFlash('#8fe6ff',0.3); addShock(player.x,player.y,'#8fe6ff',4.0);
 }
 
 /* ---------- 황금 간식 (움직이는 보너스) ---------- */
@@ -879,8 +942,48 @@ function collectBonus(){
   G.timeLeft=Math.min(cfg.time, G.timeLeft+CFG.bonusTime);
   floatText(bonus.x,bonus.y,'+'+pts,'#ffe08a');
   spawnBurst(bonus.x,bonus.y,COL.yellow);
+  addShake(3); addFlash('#ffd54a',0.22); addShock(bonus.x,bonus.y,'#ffd54a',2.6);
   Sound.bonus();
   bonus=null;
+}
+
+/* ---------- 니어미스 (아슬아슬 회피 → 슬로모 + 보너스) ---------- */
+function nearMiss(e){
+  G.score+=CFG.nearMissBonus; G.nearCd=CFG.nearMissCd; G.slowmo=0.28;
+  floatText((player.x+e.x)/2,(player.y+e.y)/2,'니어미스!',COL.frightenedPale);
+  addFlash('#8fe6ff',0.12);
+  Sound.near();
+}
+
+/* ---------- 유성 (경고 → 한 줄 관통) ---------- */
+function updateMeteor(dt){
+  if(meteor){
+    if(meteor.phase==='warn'){
+      meteor.t-=dt;
+      if(meteor.t<=0){ meteor.phase='sweep'; meteor.pos=-1.5; Sound.meteor(); addShake(3); }
+    } else {
+      meteor.pos += CFG.meteorSpeed*dt;
+      const inLane = meteor.orient==='h' ? Math.round(player.y)===meteor.lane : Math.round(player.x)===meteor.lane;
+      const along  = meteor.orient==='h' ? player.x : player.y;
+      if(inLane && Math.abs(along-meteor.pos)<0.7 && G.invuln<=0 && G.stun<=0) meteorHit();
+      const end = meteor.orient==='h' ? cols+1.5 : rows+1.5;
+      if(meteor.pos>end){ meteor=null; G.meteorCd=CFG.meteorEvery; }
+    }
+  } else {
+    G.meteorCd-=dt;
+    if(G.meteorCd<=0) spawnMeteor();
+  }
+}
+function spawnMeteor(){
+  const orient = rnd()<0.5?'h':'v';
+  const lane = orient==='h' ? 1+ri(rows-2) : 1+ri(cols-2);
+  meteor={orient,lane,phase:'warn',t:CFG.meteorWarn,pos:-1.5};
+}
+function meteorHit(){
+  G.stun=0.8; G.invuln=Math.max(G.invuln,1.1); G.comboMult=1; G.comboTimer=0;
+  addShake(11); addFlash('#ffae3c',0.4); addShock(player.x,player.y,'#ffae3c',3);
+  floatText(player.x,player.y,'유성 직격!',COL.redL);
+  Sound.hit();
 }
 
 /* ---------- 요리 / 레벨업 ---------- */
@@ -891,8 +994,9 @@ function startCook(){
   G.score += 500 + timeBonus + (G.cookPerfect?250:0);
   G.dishesDone++;
   Sound.dish(); Sound.setFast(false);
+  addShake(8); addFlash('#37e6ff',0.4); if(player) addShock(player.x,player.y,'#37e6ff',5);
   // 요리 오버레이 표시
-  document.getElementById('cook-dish').textContent = dish.name+' 완성!  (시간 보너스 +'+timeBonus+')';
+  document.getElementById('cook-dish').textContent = dish.name+' 확보!  (시간 보너스 +'+timeBonus+')';
   document.getElementById('cook-pot').textContent = dish.pot;
   const pf=document.getElementById('cook-perfect');
   pf.style.display = G.cookPerfect?'block':'none';
@@ -914,7 +1018,7 @@ function gameOver(reason){
   if(G.score>BEST){ BEST=G.score; localStorage.setItem('kg_best',BEST); }
   Sound.stopBGM(); Sound.over();
   document.getElementById('over-reason').textContent =
-    reason==='time' ? '시간이 다 됐어요... 동이 텄습니다 🌅' : '귀신에게 붙잡혔어요... 아이고~ 👻';
+    reason==='time' ? '시간 초과... 초신성이 폭발했습니다 💥' : '유령에게 흡수됐어요... 👾';
   document.getElementById('over-score').textContent = G.score.toLocaleString();
   document.getElementById('over-dishes').textContent = G.dishesDone;
   document.getElementById('over-best').textContent = '최고 점수 '+BEST.toLocaleString();
@@ -953,74 +1057,95 @@ function render(){
   ctx.setTransform(VIEW.dpr,0,0,VIEW.dpr,0,0);
   ctx.clearRect(0,0,VIEW.w,VIEW.h);
   if(!maze) return;
-  // 바닥
-  ctx.fillStyle='#efe3c8'; ctx.fillRect(VIEW.ox,VIEW.oy,cs*cols,cs*rows);
-  // 벽 (한옥 기와 타일)
+  // 화면 흔들림 (임팩트)
+  if(shakeAmt>0.1){ const sxx=(Math.random()*2-1)*shakeAmt, syy=(Math.random()*2-1)*shakeAmt;
+    ctx.setTransform(VIEW.dpr,0,0,VIEW.dpr, sxx*VIEW.dpr, syy*VIEW.dpr); }
+  // 바닥 (심우주)
+  const floorG=ctx.createRadialGradient(VIEW.ox+cs*cols*0.5,VIEW.oy+cs*rows*0.35,cs,VIEW.ox+cs*cols*0.5,VIEW.oy+cs*rows*0.5,cs*rows*0.7);
+  floorG.addColorStop(0,'#0c1330'); floorG.addColorStop(1,'#05081a');
+  ctx.fillStyle=floorG; ctx.fillRect(VIEW.ox,VIEW.oy,cs*cols,cs*rows);
+  // 별밭 (반짝임)
+  for(const st of stars){
+    const tw=0.5+0.5*Math.sin(G.time*st.tw+st.ph);
+    ctx.globalAlpha=0.22+tw*0.65; ctx.fillStyle=st.c;
+    ctx.beginPath(); ctx.arc(VIEW.ox+st.x*cs, VIEW.oy+st.y*cs, st.r*(0.7+tw*0.55),0,6.283); ctx.fill();
+  }
+  ctx.globalAlpha=1;
+  // 벽 (네온 통로 패널)
   for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){
     if(!maze[y][x]) continue;
     const X=VIEW.ox+x*cs, Y=VIEW.oy+y*cs;
-    ctx.fillStyle=COL.green; roundRect(ctx,X+1,Y+1,cs-2,cs-2,cs*0.28); ctx.fill();
-    ctx.fillStyle='rgba(255,255,255,0.10)'; roundRect(ctx,X+2,Y+2,cs-4,(cs-4)*0.45,cs*0.22); ctx.fill();
+    const wg=ctx.createLinearGradient(X,Y,X,Y+cs);
+    wg.addColorStop(0,'#1b2a63'); wg.addColorStop(1,'#0e173c');
+    ctx.fillStyle=wg; roundRect(ctx,X+1,Y+1,cs-2,cs-2,cs*0.22); ctx.fill();
+    ctx.strokeStyle='rgba(55,230,255,0.5)'; ctx.lineWidth=1.5; roundRect(ctx,X+1.5,Y+1.5,cs-3,cs-3,cs*0.2); ctx.stroke();
+    ctx.fillStyle='rgba(120,200,255,0.12)'; roundRect(ctx,X+2,Y+2,cs-4,(cs-4)*0.4,cs*0.16); ctx.fill();
   }
-  // 동트기: 남은 시간 20초 이하 → 새벽 하늘빛 + 떠오르는 해
+  // 초신성 임박: 남은 시간 20초 이하 → 백청색 섬광 + 떠오르는 초신성
   if(G.state==='playing' && G.timeLeft<=20){
     const dawn=clamp((20-G.timeLeft)/20,0,1);
     const gy=ctx.createLinearGradient(0,VIEW.oy,0,VIEW.oy+cs*rows);
-    gy.addColorStop(0,`rgba(255,150,60,${0.42*dawn})`);
-    gy.addColorStop(0.5,`rgba(255,190,120,${0.16*dawn})`);
-    gy.addColorStop(1,'rgba(255,220,150,0)');
+    gy.addColorStop(0,`rgba(130,205,255,${0.5*dawn})`);
+    gy.addColorStop(0.5,`rgba(180,120,255,${0.18*dawn})`);
+    gy.addColorStop(1,'rgba(255,120,200,0)');
     ctx.fillStyle=gy; ctx.fillRect(VIEW.ox,VIEW.oy,cs*cols,cs*rows);
-    const sr=cs*1.5, sx=VIEW.ox+cs*cols*0.5, sy=VIEW.oy - sr*0.55 + dawn*sr*0.95;
-    const sg=ctx.createRadialGradient(sx,sy,sr*0.2,sx,sy,sr);
-    sg.addColorStop(0,`rgba(255,244,196,${0.92*dawn})`); sg.addColorStop(1,'rgba(255,200,120,0)');
+    const sr=cs*1.6, sx=VIEW.ox+cs*cols*0.5, sy=VIEW.oy - sr*0.5 + dawn*sr*0.95;
+    const sg=ctx.createRadialGradient(sx,sy,sr*0.08,sx,sy,sr);
+    sg.addColorStop(0,`rgba(255,255,255,${0.98*dawn})`);
+    sg.addColorStop(0.4,`rgba(150,210,255,${0.7*dawn})`);
+    sg.addColorStop(1,'rgba(120,80,255,0)');
     ctx.fillStyle=sg; ctx.beginPath(); ctx.arc(sx,sy,sr,0,6.283); ctx.fill();
   }
   // 재료 (색 있는 "펠릿" 원반 + 이모지 → 어떤 기기/폰트에서도 잘 보임)
   ctx.textAlign='center'; ctx.textBaseline='middle';
   const emFont='px system-ui,"Apple Color Emoji","Noto Color Emoji","Segoe UI Emoji"';
   const bob0=Math.sin(G.time*4);
-  // 아궁이(순간이동 포털) — 부뚜막 화덕
+  // 웜홀(순간이동 포털) — 소용돌이 사건의 지평선
   for(const w of warps){
-    const X=px(w.x), Y=py(w.y), r=cs*0.42, fl=0.6+0.4*Math.sin(G.time*7+w.x);
+    const X=px(w.x), Y=py(w.y), r=cs*0.42, sp=G.time*2+w.x;
     ctx.save();
-    ctx.fillStyle='#2a211b'; roundRect(ctx,X-r,Y-r*0.9,2*r,r*1.8,cs*0.22); ctx.fill();
-    const g=ctx.createRadialGradient(X,Y+r*0.1,r*0.1,X,Y+r*0.1,r*0.9);
-    g.addColorStop(0,`rgba(255,${(170+fl*60)|0},70,0.9)`);
-    g.addColorStop(0.6,'rgba(224,90,40,0.7)');
-    g.addColorStop(1,'rgba(60,20,10,0.2)');
-    ctx.fillStyle=g; ctx.beginPath();
-    ctx.arc(X,Y+r*0.1,r*0.7,Math.PI,0); ctx.lineTo(X+r*0.7,Y+r*0.55); ctx.lineTo(X-r*0.7,Y+r*0.55); ctx.closePath(); ctx.fill();
-    ctx.font=Math.floor(cs*0.32)+emFont; ctx.fillText('🔥',X,Y+r*0.02);
+    const g=ctx.createRadialGradient(X,Y,r*0.08,X,Y,r);
+    g.addColorStop(0,'#05081a'); g.addColorStop(0.5,'#4a2596'); g.addColorStop(1,'rgba(55,230,255,0.05)');
+    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(X,Y,r,0,6.283); ctx.fill();
+    ctx.lineWidth=2.2;
+    for(let i=0;i<3;i++){
+      ctx.strokeStyle = i%2 ? 'rgba(55,230,255,0.85)' : 'rgba(180,110,255,0.85)';
+      ctx.beginPath(); ctx.arc(X,Y,r*(0.32+i*0.18), sp+i*1.3, sp+i*1.3+4.2); ctx.stroke();
+    }
     ctx.restore();
   }
+  // 에너지 셀 (시안 발광 오브)
   for(const g of ingredients){
-    const X=px(g.x), Y=py(g.y)+bob0*cs*0.03, r=cs*0.27;
-    const grad=ctx.createRadialGradient(X-r*0.3,Y-r*0.3,r*0.2,X,Y,r);
-    grad.addColorStop(0,'#f6c65a'); grad.addColorStop(1,COL.yellow);
+    const X=px(g.x), Y=py(g.y)+bob0*cs*0.03, r=cs*0.23;
+    const glow=0.5+0.5*Math.sin(G.time*5+g.x+g.y);
+    ctx.fillStyle='rgba(55,230,255,'+(0.14+glow*0.18)+')'; ctx.beginPath(); ctx.arc(X,Y,r*1.75,0,6.283); ctx.fill();
+    const grad=ctx.createRadialGradient(X-r*0.3,Y-r*0.3,r*0.15,X,Y,r);
+    grad.addColorStop(0,'#eaffff'); grad.addColorStop(0.6,'#5fe6ff'); grad.addColorStop(1,'#1aa8e0');
     ctx.fillStyle=grad; ctx.beginPath(); ctx.arc(X,Y,r,0,6.283); ctx.fill();
-    ctx.strokeStyle='rgba(140,70,20,0.55)'; ctx.lineWidth=1.5; ctx.stroke();
-    ctx.font=Math.floor(cs*0.34)+emFont; ctx.fillText(dish.emoji,X,Y+1);
   }
-  // 소금 부적 (흰 원반 + 🧂)
+  // 정지장 크리스탈 (얼음빛 다이아몬드)
   for(const s of salts){
-    const X=px(s.x), Y=py(s.y)+bob0*cs*0.03, r=cs*0.27;
-    const grad=ctx.createRadialGradient(X-r*0.3,Y-r*0.3,r*0.2,X,Y,r);
-    grad.addColorStop(0,'#ffffff'); grad.addColorStop(1,'#c4cfdd');
-    ctx.fillStyle=grad; ctx.beginPath(); ctx.arc(X,Y,r,0,6.283); ctx.fill();
-    ctx.strokeStyle='rgba(90,110,140,0.6)'; ctx.lineWidth=1.5; ctx.stroke();
-    ctx.font=Math.floor(cs*0.3)+emFont; ctx.fillText('🧂',X,Y+1);
+    const X=px(s.x), Y=py(s.y)+bob0*cs*0.03, r=cs*0.26;
+    ctx.save();
+    ctx.fillStyle='rgba(140,230,255,0.18)'; ctx.beginPath(); ctx.arc(X,Y,r*1.6,0,6.283); ctx.fill();
+    const grad=ctx.createLinearGradient(X,Y-r,X,Y+r);
+    grad.addColorStop(0,'#eafcff'); grad.addColorStop(1,'#7fd0ff');
+    ctx.fillStyle=grad; ctx.strokeStyle='rgba(255,255,255,0.9)'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(X,Y-r); ctx.lineTo(X+r*0.7,Y); ctx.lineTo(X,Y+r); ctx.lineTo(X-r*0.7,Y); ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    ctx.restore();
   }
-  // 김치 파워 (맥동 원반 + 링 → "파워 펠릿")
+  // 플라즈마 코어 (백열 마젠타 + 시안 봉쇄 링)
   const pulse=0.5+0.5*Math.sin(G.time*6);
   for(const k of kimchis){
-    const X=px(k.x),Y=py(k.y), r=cs*0.30;
+    const X=px(k.x),Y=py(k.y), r=cs*0.28;
     ctx.save();
-    const grad=ctx.createRadialGradient(X-r*0.3,Y-r*0.3,r*0.2,X,Y,r);
-    grad.addColorStop(0,COL.redL); grad.addColorStop(1,COL.red);
+    ctx.fillStyle='rgba(255,62,165,'+(0.16+pulse*0.2)+')'; ctx.beginPath(); ctx.arc(X,Y,r*1.85,0,6.283); ctx.fill();
+    const grad=ctx.createRadialGradient(X-r*0.3,Y-r*0.3,r*0.15,X,Y,r);
+    grad.addColorStop(0,'#ffffff'); grad.addColorStop(0.5,COL.redL); grad.addColorStop(1,COL.red);
     ctx.fillStyle=grad; ctx.beginPath(); ctx.arc(X,Y,r,0,6.283); ctx.fill();
-    ctx.strokeStyle=`rgba(232,163,44,${0.5+0.5*pulse})`; ctx.lineWidth=2+pulse*2.5;
+    ctx.strokeStyle=`rgba(55,230,255,${0.4+0.5*pulse})`; ctx.lineWidth=2+pulse*2;
     ctx.beginPath(); ctx.arc(X,Y,cs*0.40,0,6.283); ctx.stroke();
-    ctx.font=Math.floor(cs*0.34)+emFont; ctx.fillStyle='#fff'; ctx.fillText('🌶️',X,Y+1);
     ctx.restore();
   }
   // 황금 간식 (움직이는 보너스): 반짝이는 별빛 링 + 원반
@@ -1047,36 +1172,93 @@ function render(){
   for(const p of particles){ ctx.globalAlpha=Math.max(0,p.life/p.max); ctx.fillStyle=p.c;
     ctx.beginPath(); ctx.arc(px(p.x),py(p.y),p.r,0,6.283); ctx.fill(); }
   ctx.globalAlpha=1;
+  // 충격파 링
+  for(const s of shockwaves){ const k=s.life/s.maxLife; ctx.globalAlpha=k*0.7; ctx.strokeStyle=s.c; ctx.lineWidth=Math.max(1,cs*0.12*k);
+    ctx.beginPath(); ctx.arc(px(s.x),py(s.y),s.r*cs,0,6.283); ctx.stroke(); }
+  ctx.globalAlpha=1;
   // 적
   for(const e of enemies) drawGhost(e);
+  // 함선 추진 잔상(트레일)
+  for(const tr of trail){ const k=tr.life/tr.max; ctx.globalAlpha=k*0.4; ctx.fillStyle='#ffd76a';
+    ctx.beginPath(); ctx.arc(px(tr.x),py(tr.y),cs*0.3*k,0,6.283); ctx.fill(); }
+  ctx.globalAlpha=1;
   // 플레이어
   drawPlayer();
-  // 떠오르는 점수
+  // 유성 (경고 밴드 → 관통 섬광)
+  if(meteor){
+    if(meteor.orient==='h'){
+      const Y=py(meteor.lane);
+      if(meteor.phase==='warn'){ ctx.fillStyle='rgba(255,140,40,'+(0.22+0.18*Math.sin(G.time*18))+')'; ctx.fillRect(VIEW.ox,Y-cs*0.5,cs*cols,cs); }
+      else { const X=px(meteor.pos);
+        const tg=ctx.createLinearGradient(X-cs*3,0,X,0); tg.addColorStop(0,'rgba(255,180,80,0)'); tg.addColorStop(1,'rgba(255,224,150,0.9)');
+        ctx.fillStyle=tg; ctx.fillRect(X-cs*3,Y-cs*0.28,cs*3,cs*0.56);
+        ctx.fillStyle='#fff6d8'; ctx.beginPath(); ctx.arc(X,Y,cs*0.3,0,6.283); ctx.fill(); }
+    } else {
+      const X=px(meteor.lane);
+      if(meteor.phase==='warn'){ ctx.fillStyle='rgba(255,140,40,'+(0.22+0.18*Math.sin(G.time*18))+')'; ctx.fillRect(X-cs*0.5,VIEW.oy,cs,cs*rows); }
+      else { const Y=py(meteor.pos);
+        const tg=ctx.createLinearGradient(0,Y-cs*3,0,Y); tg.addColorStop(0,'rgba(255,180,80,0)'); tg.addColorStop(1,'rgba(255,224,150,0.9)');
+        ctx.fillStyle=tg; ctx.fillRect(X-cs*0.28,Y-cs*3,cs*0.56,cs*3);
+        ctx.fillStyle='#fff6d8'; ctx.beginPath(); ctx.arc(X,Y,cs*0.3,0,6.283); ctx.fill(); }
+    }
+  }
+  // 포커스 비네트 (가장자리 어둡게 → 시선 집중 · 위험/파워 시 색 변화)
+  {
+    const cx=VIEW.ox+cs*cols/2, cy=VIEW.oy+cs*rows/2, maxR=Math.hypot(cs*cols/2,cs*rows/2);
+    let danger=0;
+    if(G.state==='playing' && player){ let md=99;
+      for(const e of enemies){ if(e.eaten||e.frightened) continue; const d=Math.hypot(player.x-e.x,player.y-e.y); if(d<md)md=d; }
+      danger=clamp((4.5-md)/4.5,0,1);
+    }
+    let edge;
+    if(G.frightened>0){ const p=REDUCE?0.45:(0.4+0.14*Math.sin(G.time*8)); edge='rgba(120,20,90,'+p+')'; }
+    else if(danger>0.05){ edge='rgba(120,10,20,'+(0.28+danger*0.42)+')'; }
+    else edge='rgba(2,4,14,0.5)';
+    const vg=ctx.createRadialGradient(cx,cy,maxR*0.55,cx,cy,maxR);
+    vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,edge);
+    ctx.fillStyle=vg; ctx.fillRect(VIEW.ox,VIEW.oy,cs*cols,cs*rows);
+  }
+  // 떠오르는 점수 (팝 + 글로우)
   ctx.textAlign='center';
-  for(const f of floats){ ctx.globalAlpha=Math.max(0,f.life/f.max); ctx.fillStyle=f.c;
-    ctx.font='bold '+Math.floor(cs*0.5)+'px system-ui,sans-serif';
+  for(const f of floats){ const k=f.life/f.max; ctx.globalAlpha=Math.max(0,k);
+    ctx.fillStyle=f.c; ctx.shadowColor=f.c; ctx.shadowBlur=cs*0.3*k;
+    ctx.font='bold '+Math.floor(cs*0.5*(1+(1-k)*0.35))+'px system-ui,sans-serif';
     ctx.fillText(f.txt,px(f.x),py(f.y)); }
-  ctx.globalAlpha=1;
+  ctx.shadowBlur=0; ctx.globalAlpha=1;
+  // 임팩트 플래시 (전체 화면)
+  if(flashA>0.01){ ctx.setTransform(VIEW.dpr,0,0,VIEW.dpr,0,0); ctx.globalAlpha=flashA; ctx.fillStyle=flashCol;
+    ctx.fillRect(0,0,VIEW.w,VIEW.h); ctx.globalAlpha=1; }
 }
 
 function drawPlayer(){
   const cs=VIEW.cs, X=px(player.x), Y=py(player.y), r=cs*0.42;
   if(G.invuln>0 && Math.floor(G.time*12)%2===0) return; // 무적 깜빡임
+  // 추진 불꽃 (진행 반대 방향)
+  if(player.dir.x||player.dir.y){
+    const tx=X-player.dir.x*r*1.05, ty=Y-player.dir.y*r*1.05;
+    const fg=ctx.createRadialGradient(tx,ty,1,tx,ty,r*0.95);
+    fg.addColorStop(0,'rgba(120,230,255,0.8)'); fg.addColorStop(1,'rgba(120,230,255,0)');
+    ctx.fillStyle=fg; ctx.beginPath(); ctx.arc(tx,ty,r*0.95,0,6.283); ctx.fill();
+  }
   ctx.save(); ctx.translate(X,Y); ctx.rotate(player.face);
-  // 몸통 (고추장색 팩맨 입)
+  // 몸통 (에너지 함선 · 팩맨 입)
   const open=player.mouth*0.9;
-  ctx.fillStyle=COL.red;
+  const grad=ctx.createRadialGradient(-r*0.3,-r*0.3,r*0.2,0,0,r);
+  grad.addColorStop(0,'#fff6c9'); grad.addColorStop(0.55,'#ffd76a'); grad.addColorStop(1,'#ff9f2e');
+  ctx.fillStyle=grad;
   ctx.beginPath(); ctx.moveTo(0,0);
   ctx.arc(0,0,r,open,6.283-open); ctx.closePath(); ctx.fill();
-  ctx.strokeStyle='rgba(0,0,0,0.18)'; ctx.lineWidth=1.5; ctx.stroke();
+  ctx.strokeStyle='rgba(55,230,255,0.9)'; ctx.lineWidth=2; ctx.stroke();
   ctx.restore();
-  // 눈 (회전 무관하게 위쪽)
-  ctx.fillStyle='#2b2320';
-  ctx.beginPath(); ctx.arc(X+ (player.dir.x)*2, Y-r*0.42, r*0.13,0,6.283); ctx.fill();
-  // 요리사 모자
-  ctx.fillStyle='#fff';
-  roundRect(ctx,X-r*0.5,Y-r*1.15,r*1.0,r*0.5,r*0.22); ctx.fill();
-  ctx.beginPath(); ctx.arc(X-r*0.25,Y-r*1.1,r*0.26,0,6.283); ctx.arc(X+r*0.25,Y-r*1.1,r*0.26,0,6.283); ctx.arc(X,Y-r*1.25,r*0.3,0,6.283); ctx.fill();
+  // 조종석(시안 눈)
+  ctx.fillStyle='#0b1330';
+  ctx.beginPath(); ctx.arc(X+(player.dir.x)*2, Y-r*0.42, r*0.15,0,6.283); ctx.fill();
+  ctx.fillStyle='#5fe6ff';
+  ctx.beginPath(); ctx.arc(X+(player.dir.x)*2, Y-r*0.42, r*0.075,0,6.283); ctx.fill();
+  // 안테나 비컨 (요리사 모자 대체)
+  ctx.strokeStyle='#9fe8ff'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(X,Y-r*0.9); ctx.lineTo(X,Y-r*1.25); ctx.stroke();
+  ctx.fillStyle='#37e6ff'; ctx.beginPath(); ctx.arc(X,Y-r*1.32,r*0.16,0,6.283); ctx.fill();
 }
 
 function drawGhost(e){
@@ -1090,7 +1272,7 @@ function drawGhost(e){
   let body;
   if(e.frightened) body = blink ? COL.frightenedPale : COL.frightened;
   else if(e.type==='red') body = COL.ghostRed;
-  else if(e.type==='cheonyeo') body = '#ece7dc';
+  else if(e.type==='cheonyeo') body = '#d9ccff';
   else body = COL.ghostWhite;
   ctx.save();
   ctx.globalAlpha = e.type==='white'&&!e.frightened ? 0.92 : 0.96;
@@ -1105,7 +1287,7 @@ function drawGhost(e){
     ctx.lineTo(X+r-(2*r)*((i+1)/b), Y+r*0.55);
   }
   ctx.closePath(); ctx.fill();
-  ctx.strokeStyle='rgba(0,0,0,0.12)'; ctx.lineWidth=1.5; ctx.stroke();
+  ctx.strokeStyle='rgba(150,200,255,0.3)'; ctx.lineWidth=1.5; ctx.stroke();
   ctx.restore();
   if(e.frightened){
     // 겁먹은 표정
@@ -1124,17 +1306,18 @@ function drawGhost(e){
   if(frozen) drawFrozen(X,Y,r);
 }
 function drawHair(X,Y,r){
+  // 처녀귀신 → 보라빛 에너지 촉수를 늘어뜨린 유령 우주선
   ctx.save();
-  ctx.fillStyle='#17120f'; ctx.strokeStyle='#17120f'; ctx.lineCap='round';
+  ctx.fillStyle='#241046'; ctx.strokeStyle='#a45cff'; ctx.lineCap='round';
   ctx.beginPath(); ctx.arc(X,Y-r*0.15,r*1.02,Math.PI,0); ctx.closePath(); ctx.fill(); // 정수리
   const strands=7;
   for(let i=0;i<=strands;i++){
     const hx=X-r + (2*r)*(i/strands), len=r*(0.9+0.5*Math.abs(Math.sin(i*1.7)));
     ctx.beginPath(); ctx.moveTo(hx,Y-r*0.1);
     ctx.quadraticCurveTo(hx+(i%2?r*0.12:-r*0.12), Y+len*0.5, hx, Y+len);
-    ctx.lineWidth=r*0.26; ctx.stroke();
+    ctx.lineWidth=r*0.24; ctx.stroke();
   }
-  ctx.fillStyle='rgba(200,40,30,0.92)';
+  ctx.fillStyle='rgba(255,90,210,0.95)';
   ctx.beginPath(); ctx.arc(X-r*0.2,Y+r*0.02,r*0.07,0,6.283); ctx.arc(X+r*0.2,Y+r*0.02,r*0.07,0,6.283); ctx.fill();
   ctx.restore();
 }
@@ -1161,7 +1344,7 @@ function drawEyes(X,Y,r,e,white){
    ======================================================================= */
 const el=(id)=>document.getElementById(id);
 function updateHUD(){
-  el('lives').textContent = '❤️'.repeat(Math.max(0,G.lives)) + '🤍'.repeat(Math.max(0,CFG.lives-G.lives));
+  el('lives').textContent = '🚀'.repeat(Math.max(0,G.lives)) + '·'.repeat(Math.max(0,CFG.lives-G.lives));
   const t=Math.max(0,Math.ceil(G.timeLeft));
   el('timer').textContent = String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0');
   el('timer').classList.toggle('warn', G.timeLeft<=20);
@@ -1182,8 +1365,8 @@ function updateHUD(){
   // 소금 버튼
   const sb=el('salt-btn');
   if(G.freeze>0){ sb.classList.remove('empty'); sb.classList.remove('ready'); el('salt-label').textContent=Math.ceil(G.freeze)+'초'; }
-  else if(G.saltSlot){ sb.classList.remove('empty'); sb.classList.add('ready'); el('salt-label').textContent='소금!'; }
-  else { sb.classList.add('empty'); sb.classList.remove('ready'); el('salt-label').textContent='소금'; }
+  else if(G.saltSlot){ sb.classList.remove('empty'); sb.classList.add('ready'); el('salt-label').textContent='정지!'; }
+  else { sb.classList.add('empty'); sb.classList.remove('ready'); el('salt-label').textContent='정지'; }
 }
 
 /* =======================================================================
@@ -1266,7 +1449,12 @@ let last=performance.now(), acc=0; const STEP=1/60;
 function frame(now){
   requestAnimationFrame(frame);
   let dt=(now-last)/1000; last=now; if(dt>0.1)dt=0.1;
-  if(G.state==='playing'){ acc+=dt; let n=0; while(acc>=STEP && n++<5){ update(STEP); acc-=STEP; } }
+  updateFX(dt);
+  if(G.slowmo>0) G.slowmo-=dt;   // 니어미스 슬로모(실시간 감쇠)
+  if(G.state==='playing'){
+    if(hitStop>0){ hitStop-=dt; }
+    else { acc+=dt*(G.slowmo>0?0.35:1); let n=0; while(acc>=STEP && n++<5){ update(STEP); acc-=STEP; } }
+  }
   else if(G.state==='cooking'){
     G.cookTimer-=dt; updateParticles(dt);
     const p=clamp(1-G.cookTimer/CFG.cookTime,0,1);
@@ -1283,11 +1471,12 @@ if(location.search.indexOf('debug')>=0){
   window.KG={
     get G(){return G;}, get player(){return player;}, get enemies(){return enemies;},
     get ingredients(){return ingredients;}, get kimchis(){return kimchis;},
-    get salts(){return salts;}, get warps(){return warps;}, get bonus(){return bonus;},
+    get salts(){return salts;}, get warps(){return warps;}, get bonus(){return bonus;}, get meteor(){return meteor;},
     collectAll(){ ingredients.length=0; G.got=G.need; },
     giveKimchi(){ G.kimchiSlot=true; },
     giveSalt(){ G.saltSlot=true; },
     dropBonus(){ spawnBonus(); },
+    dropMeteor(){ spawnMeteor(); },
     setTime(s){ G.timeLeft=s; },
     warp(x,y){ player.x=x; player.y=y; player.dir={x:0,y:0}; },
     activate:activatePower, salt:activateSalt

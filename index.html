@@ -581,70 +581,77 @@ function setupWarpTunnels(){
   }
 }
 
-/* 레벨마다 바뀌는 "캔디" 테마 (귀여운 픽셀 톤). base/hi/sh=벽 색, deco=장식 무늬 */
+/* 레벨마다 바뀌는 "캔디" 테마. rc=모서리(0 각/2 둥근), deco=픽셀 장식 무늬 */
 const THEMES=[
-  {n:'딸기',   base:'#ff9ec1', hi:'#ffd3e4', sh:'#e0699a', out:'#b23f6b', f1:'#fff0f5', f2:'#ffe6ef', deco:'heart', dc:'rgba(255,255,255,.8)'},
-  {n:'민트',   base:'#79d3b4', hi:'#bff0e0', sh:'#46a88a', out:'#2f8069', f1:'#f0fbf5', f2:'#e4f6ec', deco:'dots',  dc:'rgba(255,255,255,.8)'},
-  {n:'초코',   base:'#9c6b45', hi:'#c79a6f', sh:'#6d4528', out:'#482c17', f1:'#efe0cf', f2:'#e6d4bd', deco:'stripe',dc:'rgba(250,232,205,.85)'},
-  {n:'블루베리',base:'#8ea6f2', hi:'#c6d3ff', sh:'#5c73c8', out:'#3b4e9d', f1:'#eef1ff', f2:'#e2e8fb', deco:'star',  dc:'rgba(255,255,255,.85)'},
-  {n:'레몬',   base:'#ffd95a', hi:'#fff0a8', sh:'#e3b32f', out:'#b78528', f1:'#fffceb', f2:'#fff6d4', deco:'dots',  dc:'rgba(255,255,255,.85)'},
-  {n:'포도',   base:'#b389d9', hi:'#ddc4f0', sh:'#895cb2', out:'#5d3d85', f1:'#f4ecfb', f2:'#ece0f7', deco:'star',  dc:'rgba(255,255,255,.8)'},
-  {n:'솜사탕', base:'#f3a4d6', hi:'#ffd4ee', sh:'#c86fb0', out:'#9b4e87', f1:'#fdeef8', f2:'#f7e2f1', deco:'heart', dc:'rgba(255,255,255,.85)'},
-  {n:'말차',   base:'#a9cf6b', hi:'#d6ecab', sh:'#7fa844', out:'#577a2c', f1:'#f4f7e6', f2:'#ecf2d4', deco:'chips', dc:'rgba(90,60,35,.75)'}
+  {n:'딸기',   base:'#ff9ec1', hi:'#ffd3e4', sh:'#e0699a', out:'#a83a62', f1:'#fff0f5', f2:'#ffe6ef', deco:'heart', dc:'rgba(255,255,255,.85)', rc:2},
+  {n:'민트',   base:'#79d3b4', hi:'#bff0e0', sh:'#46a88a', out:'#2b7a63', f1:'#f0fbf5', f2:'#e4f6ec', deco:'dots',  dc:'rgba(255,255,255,.85)', rc:2},
+  {n:'초코',   base:'#9c6b45', hi:'#c79a6f', sh:'#5f3c22', out:'#3f2612', f1:'#efe0cf', f2:'#e6d4bd', deco:'stripe',dc:'rgba(252,236,210,.9)',  rc:0},
+  {n:'블루베리',base:'#8ea6f2', hi:'#c6d3ff', sh:'#5468bd', out:'#354897', f1:'#eef1ff', f2:'#e2e8fb', deco:'star',  dc:'rgba(255,255,255,.9)',  rc:2},
+  {n:'레몬',   base:'#ffd95a', hi:'#fff0a8', sh:'#e0af2b', out:'#a87c22', f1:'#fffceb', f2:'#fff6d4', deco:'dots',  dc:'rgba(255,255,255,.9)',  rc:2},
+  {n:'포도',   base:'#b389d9', hi:'#ddc4f0', sh:'#8154ad', out:'#563880', f1:'#f4ecfb', f2:'#ece0f7', deco:'star',  dc:'rgba(255,255,255,.85)', rc:2},
+  {n:'솜사탕', base:'#f3a4d6', hi:'#ffd4ee', sh:'#c86fb0', out:'#93487f', f1:'#fdeef8', f2:'#f7e2f1', deco:'heart', dc:'rgba(255,255,255,.9)',  rc:2},
+  {n:'말차',   base:'#a9cf6b', hi:'#d6ecab', sh:'#7ba23f', out:'#4f6f28', f1:'#f4f7e6', f2:'#ecf2d4', deco:'chips', dc:'rgba(74,45,24,.8)',     rc:0}
 ];
 function levelTheme(){ return THEMES[((cfg?cfg.level:1)-1)%THEMES.length]; }
+// 픽셀 장식 패턴(중심 기준 1px 좌표)
+const HEART=[[-2,-2],[-1,-2],[1,-2],[2,-2],[-3,-1],[-2,-1],[-1,-1],[0,-1],[1,-1],[2,-1],[3,-1],[-3,0],[-2,0],[-1,0],[0,0],[1,0],[2,0],[3,0],[-2,1],[-1,1],[0,1],[1,1],[2,1],[-1,2],[0,2],[1,2],[0,3]];
+const STAR =[[0,-3],[0,-2],[-1,-1],[0,-1],[1,-1],[-3,0],[-2,0],[-1,0],[0,0],[1,0],[2,0],[3,0],[-2,1],[-1,1],[0,1],[1,1],[2,1],[-1,2],[1,2],[-2,3],[2,3]];
 
-/* 캔디 벽 미로 스프라이트: 저해상도(셀당 T px) 픽셀로 그린 뒤 nearest-neighbor 확대 */
+/* 캔디 벽 미로 스프라이트: 저해상도(셀당 T px) 픽셀로 그린 뒤 nearest-neighbor 확대 → 또렷한 픽셀 아트 */
 function buildMazeSprite(){
   const cs=VIEW.cs; if(!cs) return;
   mazeW=cols*cs; mazeH=rows*cs;
-  const th=levelTheme(), T=18;
+  const th=levelTheme(), T=16;
   const c=document.createElement('canvas'); c.width=cols*T; c.height=rows*T;
-  const g=c.getContext('2d');
+  const g=c.getContext('2d'); g.imageSmoothingEnabled=false;
   // 바닥: 테마색 체커 + 반짝 텍스처
   for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){
     const X=x*T,Y=y*T;
     g.fillStyle=((x+y)&1)?th.f1:th.f2; g.fillRect(X,Y,T,T);
     const h=(x*928371+y*1299709)>>>0;
-    g.fillStyle='rgba(255,255,255,0.4)'; g.fillRect(X+(h%T),Y+((h>>5)%T),1,1);
+    g.fillStyle='rgba(255,255,255,0.45)'; g.fillRect(X+(h%T),Y+((h>>5)%T),1,1);
   }
-  // 벽: 캔디 타일
+  // 벽: 캔디 타일 (하드 픽셀)
   for(let y=0;y<rows;y++)for(let x=0;x<cols;x++) if(maze[y][x]) drawCandyTile(g,x*T,y*T,T,th,x,y);
   mazeSprite=c;
 }
 function drawCandyTile(g,X,Y,T,th,gx,gy){
-  const R=4, x=X+1, y=Y+1, w=T-2, h=T-2;
-  const grad=g.createLinearGradient(x,y,x,y+h);
-  grad.addColorStop(0,th.hi); grad.addColorStop(0.5,th.base); grad.addColorStop(1,th.sh);
-  roundRect(g,x,y,w,h,R); g.fillStyle=grad; g.fill();
-  roundRect(g,x+0.5,y+0.5,w-1,h-1,R); g.lineWidth=1.2; g.strokeStyle=th.out; g.stroke();
-  g.save(); roundRect(g,x,y,w,h,R); g.clip();
-  // 윗쪽 광택 밴드
-  g.fillStyle='rgba(255,255,255,0.5)'; roundRect(g,x+2,y+1.5,w-4,h*0.34,R*0.6); g.fill();
-  // 장식 무늬(테마별)
-  drawDeco(g,th.deco,X+T/2,Y+T/2,T,th);
-  g.restore();
-  // 캔디 반짝(픽셀)
-  g.fillStyle='rgba(255,255,255,0.9)'; g.fillRect(x+2,y+2,2,2);
-}
-function drawDeco(g,type,cx,cy,T,th){
-  g.fillStyle=th.dc; g.strokeStyle=th.dc;
-  const s=T*0.16;
-  if(type==='dots'){
-    for(const d of [[-0.28,-0.28],[0.28,-0.28],[-0.28,0.28],[0.28,0.28],[0,0]]) { g.beginPath(); g.arc(cx+d[0]*T,cy+d[1]*T,s*0.8,0,6.283); g.fill(); }
-  } else if(type==='chips'){
-    for(const d of [[-0.24,-0.16],[0.22,-0.22],[0.05,0.24]]) g.fillRect(cx+d[0]*T-s*0.7, cy+d[1]*T-s*0.7, s*1.4, s*1.4);
-  } else if(type==='heart'){
-    g.beginPath(); g.arc(cx-s*0.55,cy-s*0.3,s*0.6,0,6.283); g.arc(cx+s*0.55,cy-s*0.3,s*0.6,0,6.283);
-    g.moveTo(cx-s*1.1,cy); g.lineTo(cx,cy+s*1.2); g.lineTo(cx+s*1.1,cy); g.closePath(); g.fill();
-  } else if(type==='star'){
-    g.beginPath();
-    for(let i=0;i<10;i++){ const a=-Math.PI/2+i*Math.PI/5, rr=(i%2?s*0.5:s*1.2); const fx=cx+Math.cos(a)*rr, fy=cy+Math.sin(a)*rr; i?g.lineTo(fx,fy):g.moveTo(fx,fy); }
-    g.closePath(); g.fill();
-  } else if(type==='stripe'){
-    g.lineWidth=T*0.13; g.lineCap='round';
-    for(let i=-1;i<=2;i++){ g.beginPath(); g.moveTo(cx+(i*0.55-0.5)*T, cy+T*0.5); g.lineTo(cx+(i*0.55-0.5)*T+T, cy-T*0.5); g.stroke(); }
+  const x=X+1, y=Y+1, w=T-2, h=T-2, rc=th.rc;
+  const fc=((gx+gy)&1)?th.f1:th.f2;
+  g.fillStyle=th.base; g.fillRect(x,y,w,h);                                  // 몸통
+  g.fillStyle=th.hi;   g.fillRect(x,y,w,2); g.fillRect(x,y,2,h);             // 위/왼쪽 하이라이트
+  g.fillStyle=lighten(th.hi,0.4); g.fillRect(x+2,y,w-4,1);                    // 최상단 반짝 라인
+  g.fillStyle=th.sh;   g.fillRect(x,y+h-2,w,2); g.fillRect(x+w-2,y,2,h);     // 아래/오른쪽 그림자
+  // 외곽선(1px)
+  g.fillStyle=th.out;
+  g.fillRect(x,y,w,1); g.fillRect(x,y+h-1,w,1); g.fillRect(x,y,1,h); g.fillRect(x+w-1,y,1,h);
+  // 둥근 모서리: 모서리 픽셀을 바닥색으로 깎기
+  if(rc>0){
+    g.fillStyle=fc;
+    for(const [cx,cy] of [[x,y],[x+w-1,y],[x,y+h-1],[x+w-1,y+h-1]]) g.fillRect(cx,cy,1,1);
+    if(rc>=2){ // 한 픽셀 더 깎아 부드럽게 + 대각 외곽선
+      for(const [cx,cy] of [[x+1,y],[x,y+1]]) g.fillRect(cx,cy,1,1);
+      for(const [cx,cy] of [[x+w-2,y],[x+w-1,y+1]]) g.fillRect(cx,cy,1,1);
+      for(const [cx,cy] of [[x+1,y+h-1],[x,y+h-2]]) g.fillRect(cx,cy,1,1);
+      for(const [cx,cy] of [[x+w-2,y+h-1],[x+w-1,y+h-2]]) g.fillRect(cx,cy,1,1);
+      g.fillStyle=th.out;
+      for(const [cx,cy] of [[x+1,y+1],[x+w-2,y+1],[x+1,y+h-2],[x+w-2,y+h-2]]) g.fillRect(cx,cy,1,1);
+    }
   }
+  // 캔디 광택(2x2 흰 픽셀)
+  g.fillStyle='rgba(255,255,255,0.92)'; g.fillRect(x+3,y+3,2,2);
+  // 픽셀 장식(테마별)
+  drawDecoPix(g,th.deco,X,Y,T,th);
+}
+function drawDecoPix(g,type,X,Y,T,th){
+  g.fillStyle=th.dc;
+  const cx=X+(T>>1), cy=Y+(T>>1);
+  if(type==='heart'){ for(const [dx,dy] of HEART) g.fillRect(cx+dx,cy+dy-1,1,1); }
+  else if(type==='star'){ for(const [dx,dy] of STAR) g.fillRect(cx+dx,cy+dy-1,1,1); }
+  else if(type==='dots'){ for(const [dx,dy] of [[-4,-4],[3,-4],[-4,3],[3,3],[-1,-1]]) g.fillRect(cx+dx,cy+dy,2,2); }
+  else if(type==='chips'){ for(const [dx,dy] of [[-4,-2],[2,-4],[-1,3]]) g.fillRect(cx+dx,cy+dy,2,2); }
+  else if(type==='stripe'){ g.save(); g.beginPath(); g.rect(X+1,Y+1,T-2,T-2); g.clip();
+    for(let d=-T; d<T; d+=6) for(let i=0;i<T;i++) g.fillRect(X+i,Y+i+d,2,2); g.restore(); }
 }
 
 function makeEnemy(type,x,y,idx){
@@ -1068,35 +1075,29 @@ function drawKawaiiEye(X,Y,s,lx,ly){
 
 function drawPlayer(){
   if(G.invuln>0 && Math.floor(G.time*12)%2===0) return; // 무적 깜빡임
-  const cs=VIEW.cs, X=px(player.x), Y=py(player.y), r=cs*0.42;
+  const cs=VIEW.cs, X=px(player.x), Y=py(player.y), r=cs*0.46;
   ctx.save();
-  // 몸통(고추 빨강) + 부드러운 광
-  ctx.shadowColor='rgba(200,60,50,.45)'; ctx.shadowBlur=cs*0.22;
-  const bg=ctx.createRadialGradient(X-r*0.3,Y-r*0.35,r*0.2,X,Y,r);
-  bg.addColorStop(0,'#ff7d6d'); bg.addColorStop(1,COL.red);
-  ctx.fillStyle=bg; ctx.beginPath(); ctx.arc(X,Y,r,0,6.283); ctx.fill();
+  ctx.translate(X,Y); ctx.rotate(player.face);
+  // ▶ 정통 팩맨: 입이 "열린 쐐기"(배경이 보이는 홈)로 벌어짐
+  const m=0.06 + player.mouth*0.62;            // 입 벌림 반각
+  ctx.shadowColor='rgba(200,60,50,.4)'; ctx.shadowBlur=cs*0.2;
+  const bg=ctx.createRadialGradient(-r*0.25,-r*0.3,r*0.2,0,0,r);
+  bg.addColorStop(0,'#ff8575'); bg.addColorStop(1,COL.red);
+  ctx.fillStyle=bg;
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.arc(0,0,r,m,6.283-m); ctx.closePath(); ctx.fill();
   ctx.shadowBlur=0;
-  // 츄잉 입(진행 방향) — 몸통은 원형 유지, 앞쪽에 어두운 입
-  ctx.save(); ctx.translate(X,Y); ctx.rotate(player.face);
-  const m=0.14+player.mouth*0.5;
-  ctx.fillStyle='#6e1710'; ctx.beginPath(); ctx.moveTo(0,0); ctx.arc(0,0,r*1.02,-m,m); ctx.closePath(); ctx.fill();
-  ctx.fillStyle='#ff8a94'; ctx.beginPath(); ctx.moveTo(r*0.15,0); ctx.arc(r*0.15,0,r*0.5,-m*0.7,m*0.7); ctx.closePath(); ctx.fill();
-  ctx.restore();
-  // 광택
-  ctx.fillStyle='rgba(255,255,255,0.3)'; ctx.beginPath(); ctx.ellipse(X-r*0.32,Y-r*0.2,r*0.2,r*0.4,-0.3,0,6.283); ctx.fill();
-  // 초록 꼭지
-  ctx.strokeStyle='#4e9a4e'; ctx.lineWidth=cs*0.07; ctx.lineCap='round';
-  ctx.beginPath(); ctx.moveTo(X,Y-r*0.82); ctx.quadraticCurveTo(X+r*0.12,Y-r*1.15,X+r*0.32,Y-r*1.2); ctx.stroke();
-  // 요리사 모자
-  ctx.fillStyle='#fff';
-  roundRect(ctx,X-r*0.5,Y-r*1.18,r*1.0,r*0.46,r*0.2); ctx.fill();
-  ctx.beginPath(); ctx.arc(X-r*0.26,Y-r*1.12,r*0.27,0,6.283); ctx.arc(X+r*0.26,Y-r*1.12,r*0.27,0,6.283); ctx.arc(X,Y-r*1.3,r*0.32,0,6.283); ctx.fill();
-  // 큰 반짝이는 눈 + 볼터치
-  const lx=player.dir.x*r*0.07, ly=player.dir.y*r*0.05;
-  drawKawaiiEye(X-r*0.25,Y-r*0.28,r*0.2,lx,ly);
-  drawKawaiiEye(X+r*0.25,Y-r*0.28,r*0.2,lx,ly);
-  ctx.fillStyle='rgba(255,130,130,0.55)';
-  ctx.beginPath(); ctx.arc(X-r*0.5,Y-r*0.02,r*0.13,0,6.283); ctx.arc(X+r*0.5,Y-r*0.02,r*0.13,0,6.283); ctx.fill();
+  // 입 가장자리 라인 + 외곽선
+  ctx.lineJoin='round'; ctx.lineCap='round';
+  ctx.strokeStyle='rgba(150,30,25,.55)'; ctx.lineWidth=cs*0.03;
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.arc(0,0,r,m,6.283-m); ctx.closePath(); ctx.stroke();
+  // 광택(몸통 위쪽)
+  ctx.fillStyle='rgba(255,255,255,0.28)';
+  ctx.beginPath(); ctx.ellipse(-r*0.2,-r*0.45,r*0.28,r*0.16,-0.5,0,6.283); ctx.fill();
+  // 눈(몸통과 함께 회전, 입 홈에 안 걸리게 위-앞쪽)
+  ctx.fillStyle='#2a2230'; ctx.beginPath(); ctx.arc(r*0.06,-r*0.5,r*0.13,0,6.283); ctx.fill();
+  ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(r*0.01,-r*0.55,r*0.05,0,6.283); ctx.fill();
+  // 볼터치
+  ctx.fillStyle='rgba(255,140,140,0.5)'; ctx.beginPath(); ctx.arc(-r*0.28,-r*0.12,r*0.11,0,6.283); ctx.fill();
   ctx.restore();
 }
 

@@ -64,8 +64,8 @@ body{
 #combo.on{opacity:1;}
 /* ---------- Stage (미궁, 가운데) ---------- */
 #stage{flex:1 1 auto;position:relative;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(180deg,#efe3c8,#e7d8b6);overflow:hidden;}
-#cv{display:block;image-rendering:auto;}
+  background:#241b14;overflow:hidden;}
+#cv{display:block;image-rendering:pixelated;image-rendering:crisp-edges;}
 /* ---------- 컨트롤 (하단 ~12%) ---------- */
 #ctrl{
   flex:0 0 auto;height:12%;min-height:58px;
@@ -124,6 +124,12 @@ body{
 #cook-bar{width:min(72%,260px);height:12px;background:rgba(244,234,213,.2);border-radius:8px;overflow:hidden;}
 #cook-bar > i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--yellow),var(--red-l));}
 .credit{position:absolute;bottom:10px;font-size:11px;color:#8a7a63;}
+.ghost-btn{background:linear-gradient(180deg,var(--green-l),var(--green))!important;color:#fff!important;box-shadow:0 5px 0 var(--green-d)!important;padding:11px 26px;font-size:clamp(14px,3.8vw,18px);}
+.help-scroll{width:100%;max-width:410px;max-height:58%;overflow-y:auto;display:flex;flex-direction:column;gap:10px;text-align:left;padding:2px 4px;-webkit-overflow-scrolling:touch;}
+.help-item{display:flex;gap:11px;align-items:flex-start;background:rgba(244,234,213,0.08);border:1px solid rgba(244,234,213,0.16);border-radius:12px;padding:9px 12px;}
+.help-item>span{font-size:clamp(19px,5.6vw,26px);flex:0 0 auto;line-height:1.25;}
+.help-item>div{font-size:clamp(12px,3.2vw,15px);line-height:1.55;color:var(--cream);}
+.help-item b{color:var(--yellow);font-weight:800;}
 @media (orientation:landscape) and (max-height:520px){
   #rotate{display:flex;}
 }
@@ -164,6 +170,7 @@ body{
     <h1>부엌 귀신</h1>
     <div class="sub">Kitchen Gwisin<br>귀신이 깃든 한옥 부엌에서<br>동트기 전에 완벽한 한식을 완성하세요!</div>
     <button class="btn" id="start-btn">시작 ▶</button>
+    <button class="btn ghost-btn" id="help-btn">게임 방법 ❓</button>
     <div class="best">최고 점수 <b id="menu-best">0</b></div>
     <div class="hint">📱 스와이프로 이동 · 가운데 버튼으로 파워<br>💻 <kbd>↑↓←→</kbd>/<kbd>WASD</kbd> 이동 · <kbd>Space</kbd> 파워 · <kbd>Esc</kbd> 일시정지</div>
     <div class="credit">v1.0 MVP · spooky-cute</div>
@@ -194,6 +201,22 @@ body{
     <div class="stat">완성한 요리 <b id="over-dishes">0</b>접시</div>
     <div class="best" id="over-best">최고 점수 0</div>
     <button class="btn" id="again-btn">다시 하기 🔁</button>
+  </div>
+
+  <!-- 오버레이: 게임 방법 (한국어 튜토리얼) -->
+  <div class="overlay" id="help">
+    <h2>게임 방법</h2>
+    <div class="help-scroll">
+      <div class="help-item"><span>🎯</span><div><b>목표</b><br>미로 속 재료(<b>노란 펠릿</b>)를 정해진 개수만큼 모으면 요리가 완성돼요. 완성하면 다음 밤(레벨)으로! 레벨이 오를수록 미로는 커지고 귀신은 <b>조금씩</b> 빨라져요.</div></div>
+      <div class="help-item"><span>🕹️</span><div><b>이동</b><br>모바일: 화면을 <b>스와이프</b>(↑↓←→)<br>PC: <b>방향키</b> 또는 <b>WASD</b></div></div>
+      <div class="help-item"><span>👻</span><div><b>귀신</b><br>⚪ 흰 귀신은 느리게 배회하고, 🔴 빨간 귀신은 당신을 <b>쫓아와요</b>. 닿으면 목숨을 잃어요!</div></div>
+      <div class="help-item"><span>🌶️</span><div><b>김치 파워</b><br>맵의 <b>빨간 김치 펠릿</b>을 주우면 아래 <b>파워 버튼</b>이 켜져요. 누르면(또는 <b>Space</b>) 모든 귀신이 파랗게 <b>겁먹고 도망</b>가요 — 이때 잡아먹으면 점수가 <b>2배씩</b>(200→400→800…)!</div></div>
+      <div class="help-item"><span>❤️</span><div><b>목숨 3개</b><br>귀신에게 닿으면 목숨 −1, 당신과 귀신 모두 시작 위치로 리셋돼요(연쇄 죽음 방지). <b>모은 재료는 그대로!</b> 잠깐 무적이 돼요.</div></div>
+      <div class="help-item"><span>⏱️</span><div><b>시간</b><br>제한 시간 안에 요리를 완성하세요. 시간이 다 되면 게임 오버. 남은 시간·목숨은 <b>보너스 점수</b>예요.</div></div>
+      <div class="help-item"><span>✨</span><div><b>완벽한 요리</b><br>한 번도 안 맞고 레벨을 클리어하면 <b>+250 보너스!</b></div></div>
+      <div class="help-item"><span>💡</span><div><b>꿀팁</b><br>재료를 <b>연속으로 빠르게</b> 먹으면 콤보 점수가 올라가요. 빨간 귀신을 김치 파워로 유인해 한 번에 여러 마리 잡아보세요!</div></div>
+    </div>
+    <button class="btn" id="help-close">알겠어요! ✔</button>
   </div>
 
   <!-- 오버레이: 세로로 돌려주세요 -->
@@ -404,12 +427,11 @@ function levelConfig(n){
   c.level = n;
   return c;
 }
-// 적 속도(셀/초). L5까지는 플레이어 이하로 클램프.
-function redSpeed(level){
-  let s=CFG.playerSpeed*(level<=5 ? (0.80+0.04*level) : Math.min(1.35,0.80+0.04*level));
-  return s;
-}
-function whiteSpeed(level){ return redSpeed(level)*0.85; }
+// 적 속도(셀/초): 스테이지마다 "완만하게" 증가. 초반은 확실히 느리게(입문자 배려).
+// L1 ≈ 0.56×플레이어 → 레벨당 +0.035, 상한 1.15×. 흰 귀신은 항상 더 느림.
+function ghostFactor(level){ return Math.min(1.15, 0.56 + 0.035*(level-1)); }
+function redSpeed(level){ return CFG.playerSpeed*ghostFactor(level); }
+function whiteSpeed(level){ return CFG.playerSpeed*ghostFactor(level)*0.82; }
 
 /* =======================================================================
    6. 게임 상태
@@ -420,6 +442,7 @@ let maze=null, cfg=null, dish=null;
 let cols=0, rows=0;
 let player=null, enemies=[], ingredients=[], kimchis=[], particles=[];
 let startCell={x:1,y:1}, homeCell={x:1,y:1}, homeSlots=[];
+let mazeSprite=null; // 픽셀 아트 미로(저해상도 오프스크린, 확대 시 nearest-neighbor)
 let G = {
   state:'menu',       // menu | playing | cooking | paused | over
   level:1, lives:CFG.lives, score:0, timeLeft:120,
@@ -497,8 +520,46 @@ function loadLevel(n){
   Sound.setFast(false);
   particles.length=0;
   computeView();
+  buildMazeSprite();
 }
 function cornerDist(c,corners){ let m=1e9; for(const [x,y] of corners) m=Math.min(m,manh(c.x,c.y,x,y)); return m; }
+
+/* 픽셀 아트 미로 스프라이트 (셀당 T=10 가상픽셀; 벽은 노출된 모서리만 베벨 → 붙은 벽이 하나의 덩어리로)*/
+function buildMazeSprite(){
+  const T=10;
+  const c=document.createElement('canvas'); c.width=cols*T; c.height=rows*T;
+  const g=c.getContext('2d'); g.imageSmoothingEnabled=false;
+  const FLOOR1='#e9d8ae', FLOOR2='#dfce9f', GRID='rgba(150,120,70,0.22)', FDOT='rgba(120,95,55,0.16)';
+  const W='#3E6B5C', W_HI='#79ac97', W_HI2='#93c1ad', W_SH='#2c4e42', W_SH2='#213a31',
+        W_TEX='rgba(33,58,49,0.45)', W_MORTAR='rgba(24,42,36,0.55)';
+  for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){
+    const X=x*T, Y=y*T;
+    if(!maze[y][x]){
+      // 바닥: 다다미풍 체커 + 미세 그리드/도트
+      g.fillStyle=((x+y)&1)?FLOOR1:FLOOR2; g.fillRect(X,Y,T,T);
+      g.fillStyle=GRID; g.fillRect(X,Y,T,1); g.fillRect(X,Y,1,T);
+      g.fillStyle=FDOT; g.fillRect(X+3,Y+3,1,1); g.fillRect(X+7,Y+6,1,1);
+    } else {
+      const up=isWall(x,y-1), dn=isWall(x,y+1), lf=isWall(x-1,y), rt=isWall(x+1,y);
+      g.fillStyle=W; g.fillRect(X,Y,T,T);
+      // 돌 텍스처(셀 좌표 기반 결정적 무늬)
+      g.fillStyle=W_TEX;
+      const s=(x*7+y*13)%5;
+      g.fillRect(X+2+(s%3),Y+2+((x+y)%3),2,1);
+      g.fillRect(X+5,Y+6,1,2);
+      // 노출 모서리 하이라이트(위/왼쪽) & 그림자(아래/오른쪽)
+      if(!up){ g.fillStyle=W_HI; g.fillRect(X,Y,T,2); g.fillStyle=W_HI2; g.fillRect(X,Y,T,1); }
+      if(!lf){ g.fillStyle=W_HI; g.fillRect(X,Y,2,T); g.fillStyle=W_HI2; g.fillRect(X,Y,1,T); }
+      if(!dn){ g.fillStyle=W_SH; g.fillRect(X,Y+T-2,T,2); g.fillStyle=W_SH2; g.fillRect(X,Y+T-1,T,1); }
+      if(!rt){ g.fillStyle=W_SH; g.fillRect(X+T-2,Y,2,T); g.fillStyle=W_SH2; g.fillRect(X+T-1,Y,2,T); }
+      // 붙은 벽 사이엔 얇은 모르타르 선
+      g.fillStyle=W_MORTAR;
+      if(up) g.fillRect(X,Y,T,1);
+      if(lf) g.fillRect(X,Y,1,T);
+    }
+  }
+  mazeSprite=c;
+}
 
 function makeEnemy(type,x,y,idx){
   return {type,x,y,dir:pickStartDir(x,y),homeIdx:idx,
@@ -587,6 +648,7 @@ function decideEaten(e){
    9. 업데이트
    ======================================================================= */
 function update(dt){
+  if(G.state!=='playing') return; // 한 프레임에 여러 스텝 처리 시 상태 전환 후 재진입 방지
   G.time+=dt;
   // 타이머
   G.timeLeft-=dt;
@@ -671,10 +733,9 @@ function update(dt){
 function rubberband(e){
   const base=redSpeed(cfg.level);
   const d=manh(Math.round(e.x),Math.round(e.y),Math.round(player.x),Math.round(player.y));
-  let s=base;
-  if(d<=4) s=base*1.2;
-  if(cfg.level<=5) s=Math.min(s,CFG.playerSpeed); // L5까지 플레이어 이하
-  return s;
+  let s = d<=3 ? base*1.12 : base;   // 가까울 때만 살짝 가속(예전보다 완화)
+  const cap = (cfg.level<=6 ? 0.95 : 1.15) * CFG.playerSpeed; // 초반엔 플레이어보다 항상 느리게
+  return Math.min(s, cap);
 }
 function collectIngredient(g){
   if(G.comboTimer>0) G.comboMult=Math.min(2.0, Math.round((G.comboMult+0.1)*10)/10);
@@ -724,6 +785,7 @@ function activatePower(){
 
 /* ---------- 요리 / 레벨업 ---------- */
 function startCook(){
+  if(G.state!=='playing') return; // 중복 진입 방지
   G.state='cooking'; G.cookTimer=CFG.cookTime;
   G.cookPerfect=!G.hitThisLevel;
   const timeBonus=Math.floor(G.timeLeft)*5;
@@ -792,15 +854,9 @@ function render(){
   ctx.setTransform(VIEW.dpr,0,0,VIEW.dpr,0,0);
   ctx.clearRect(0,0,VIEW.w,VIEW.h);
   if(!maze) return;
-  // 바닥
-  ctx.fillStyle='#efe3c8'; ctx.fillRect(VIEW.ox,VIEW.oy,cs*cols,cs*rows);
-  // 벽 (한옥 기와 타일)
-  for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){
-    if(!maze[y][x]) continue;
-    const X=VIEW.ox+x*cs, Y=VIEW.oy+y*cs;
-    ctx.fillStyle=COL.green; roundRect(ctx,X+1,Y+1,cs-2,cs-2,cs*0.28); ctx.fill();
-    ctx.fillStyle='rgba(255,255,255,0.10)'; roundRect(ctx,X+2,Y+2,cs-4,(cs-4)*0.45,cs*0.22); ctx.fill();
-  }
+  // 미로: 픽셀 아트 스프라이트를 nearest-neighbor로 확대 → 도트 질감
+  ctx.imageSmoothingEnabled=false;
+  if(mazeSprite) ctx.drawImage(mazeSprite, VIEW.ox, VIEW.oy, cs*cols, cs*rows);
   // 재료 (색 있는 "펠릿" 원반 + 이모지 → 어떤 기기/폰트에서도 잘 보임)
   ctx.textAlign='center'; ctx.textBaseline='middle';
   const emFont='px system-ui,"Apple Color Emoji","Noto Color Emoji","Segoe UI Emoji"';
@@ -936,7 +992,7 @@ function updateHUD(){
    ======================================================================= */
 function showOverlay(id){ el(id).classList.add('show'); }
 function hideOverlay(id){ el(id).classList.remove('show'); }
-function hideAllOverlays(){ ['menu','pause','cook','over'].forEach(hideOverlay); }
+function hideAllOverlays(){ ['menu','pause','cook','over','help'].forEach(hideOverlay); }
 
 /* =======================================================================
    14. 게임 흐름 제어
@@ -993,6 +1049,8 @@ el('resume-btn').addEventListener('click',togglePause);
 el('restart-btn').addEventListener('click',()=>{ hideOverlay('pause'); newRun(); });
 el('power-btn').addEventListener('click',()=>{ Sound.resume(); activatePower(); });
 el('pause-btn').addEventListener('click',togglePause);
+el('help-btn').addEventListener('click',()=>{ Sound.resume(); showOverlay('help'); });
+el('help-close').addEventListener('click',()=>hideOverlay('help'));
 el('mute-btn').addEventListener('click',()=>{ Sound.resume(); const m=Sound.toggleMute(); el('mute-btn').textContent=m?'🔇':'🔊'; });
 
 // 리사이즈
@@ -1005,11 +1063,13 @@ document.addEventListener('visibilitychange',()=>{ if(document.hidden && G.state
    16. 메인 루프 (고정 타임스텝 60fps 로직)
    ======================================================================= */
 el('menu-best').textContent=BEST.toLocaleString();
+// 첫 방문 시 게임 방법 자동 안내
+try{ if(!localStorage.getItem('kg_help_seen')){ showOverlay('help'); localStorage.setItem('kg_help_seen','1'); } }catch(e){}
 let last=performance.now(), acc=0; const STEP=1/60;
 function frame(now){
   requestAnimationFrame(frame);
   let dt=(now-last)/1000; last=now; if(dt>0.1)dt=0.1;
-  if(G.state==='playing'){ acc+=dt; let n=0; while(acc>=STEP && n++<5){ update(STEP); acc-=STEP; } }
+  if(G.state==='playing'){ acc+=dt; let n=0; while(acc>=STEP && n++<5){ update(STEP); acc-=STEP; if(G.state!=='playing') break; } }
   else if(G.state==='cooking'){
     G.cookTimer-=dt; updateParticles(dt);
     const p=clamp(1-G.cookTimer/CFG.cookTime,0,1);

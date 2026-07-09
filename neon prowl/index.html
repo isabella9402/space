@@ -1410,11 +1410,15 @@ function setIcon(node, tile, emoji, size){
   im.onerror=()=>{ node.textContent=emoji; };
   im.src=tileFile(tile);
 }
+let _heroGen=0;
 function buildMenuHero(){
-  const host=el('menu-hero'); if(!host) return; host.textContent='';
+  const host=el('menu-hero'); if(!host) return; host.textContent=''; const gen=++_heroGen;
+  // 세대(gen) 가드: 두 번 호출(setup + CHAR.onload) 시 이전 호출의 지연 로드가
+  // 중복 append 되지 않도록 최신 세대만 반영 (데이터 URI 즉시 로드 레이스 대비)
   const add=(src,size,fb)=>{ const im=new Image(); im.width=size; im.height=size;
     im.style.cssText='image-rendering:pixelated;vertical-align:middle;margin:0 4px';
-    im.onload=()=>host.appendChild(im); im.onerror=()=>{ const s=document.createElement('span'); s.textContent=fb; host.appendChild(s); };
+    im.onload=()=>{ if(gen===_heroGen) host.appendChild(im); };
+    im.onerror=()=>{ if(gen===_heroGen){ const s=document.createElement('span'); s.textContent=fb; host.appendChild(s); } };
     im.src=src; };
   // 용사 + 골드 코인 (스프라이트 실패 시 ⚔️/🪙 이모지)
   if(LIFE_URI) add(LIFE_URI,58,'⚔️'); else add(tileFile(SPRITE_MAP.fox),52,'⚔️');

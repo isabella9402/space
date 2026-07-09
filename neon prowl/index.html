@@ -3,34 +3,38 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#0a0618">
-<title>네온 프라울 · NEON PROWL</title>
+<meta name="theme-color" content="#1a0f0a">
+<title>던전 프라울 · DUNGEON PROWL</title>
 <style>
 /* ========================================================================
-   네온 프라울 (NEON PROWL) — 여우의 네온 미로 잠입
-   단일 HTML 파일 · Canvas 2D + 벡터/이모지 · 한국어 UI · WebAudio 사운드
+   던전 프라울 (DUNGEON PROWL) — 용사의 고대 던전 잠입 · 던전 판타지 테마
+   단일 HTML 파일 · Canvas 2D + Kenney 스프라이트(벡터/이모지 폴백) · 한국어 UI
    ------------------------------------------------------------------------
    IP 안전 설계: 팩맨 메커니즘(미로/추격/파워업)의 손맛만 취하고
-   표현은 전혀 다르게 재해석 — 여우 · 네온 · 5가지 창작 트위스트.
+   표현은 전혀 다르게 재해석 — 용사 · 횃불 던전 · 5가지 창작 트위스트.
+   ------------------------------------------------------------------------
+   테마 개편(네온 → 던전): 팔레트/네이밍/색상만 교체, 게임플레이 100% 동일.
    ======================================================================== */
 :root{
-  --bg:#0a0618;          /* 심연 보라-검정 */
-  --wall:#2d1b4e;        /* 벽 채움 */
-  --wallEdge:#ff2ec7;    /* 벽 네온 핑크 테두리 */
-  --cell:#7cfaff;        /* 에너지 셀 시안 */
-  --egg:#ffb84d;         /* 미스터리 에그 */
-  --text:#e8d8ff;        /* 기본 텍스트 */
-  --textMuted:#a89dc8;
-  --ui:#ff2ec7;          /* 버튼 네온 핑크 */
-  --uiHover:#ff6be0;
-  --combo:#ffd93d;
-  --rush:#ff6b6b;
-  --panel:rgba(16,8,36,0.92);
+  /* --- 던전 warm 팔레트 (나무-돌-횃불) : 네온 팔레트 전면 교체 --- */
+  --bg:#1a0f0a;          /* 하수 속 나무-검정 */
+  --wall:#4a3020;        /* 돌벽 채움(나무-갈색) */
+  --wallEdge:#8b5a2b;    /* 돌 테두리(횃불빛) */
+  --cell:#ffd700;        /* 골드 코인 */
+  --egg:#c084fc;         /* 마법 보물 상자(보라) */
+  --text:#f4e4bc;        /* 낡은 양피지 */
+  --textMuted:#a89076;
+  --ui:#d4a574;          /* 나무 버튼 */
+  --uiHover:#e6b98a;
+  --combo:#ff9500;       /* 불꽃 콤보 주황 */
+  --rush:#dc2626;        /* 핏빛 각성 */
+  --panel:rgba(30,18,10,0.94);  /* 어두운 나무 패널 */
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;}
 body{
-  background:radial-gradient(circle at 50% 22%, #1a0f2e 0%, var(--bg) 72%);
+  /* 던전 배경: 횃불 밝힌 따뜻한 갈색 그라디언트 */
+  background:radial-gradient(circle at 50% 22%, #2a1810 0%, var(--bg) 72%);
   font-family:'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic','Segoe UI',system-ui,sans-serif;
   color:var(--text);
   display:flex;align-items:center;justify-content:center;
@@ -40,9 +44,10 @@ body{
   position:relative;
   width:min(100vw, 56.25vh);
   height:min(177.78vw, 100vh);
-  background:linear-gradient(180deg,#140a2e 0%, #08040f 100%);
+  background:linear-gradient(180deg,#2a1810 0%, #0d0704 100%);
   display:flex;flex-direction:column;overflow:hidden;
-  box-shadow:0 0 44px rgba(255,46,199,0.28), inset 0 0 0 2px rgba(255,46,199,0.30);
+  /* 프레임 글로우: 네온 핑크 → 횃불 warm glow */
+  box-shadow:0 0 44px rgba(212,165,116,0.28), inset 0 0 0 2px rgba(139,90,43,0.4);
   border-radius:14px;
 }
 /* ---------- 상단 HUD (~13%) ---------- */
@@ -59,21 +64,21 @@ body{
 .ui-ic img{width:18px;height:18px;image-rendering:pixelated;vertical-align:middle;}
 #combo{
   font-size:clamp(12px,3.4vw,20px);font-weight:900;color:var(--combo);
-  text-shadow:0 0 8px rgba(255,217,61,.8);opacity:0;transition:opacity .18s,transform .12s;transform:scale(.8);
+  text-shadow:0 0 8px rgba(255,149,0,.85);opacity:0;transition:opacity .18s,transform .12s;transform:scale(.8);
 }
 #combo.on{opacity:1;transform:scale(1);}
 #score-wrap{font-size:clamp(11px,2.9vw,16px);color:var(--text);font-weight:700;}
 #score-wrap b{color:var(--cell);font-variant-numeric:tabular-nums;}
 .cell-row{display:flex;align-items:center;gap:8px;}
 #cell-ic{font-size:clamp(12px,3.2vw,18px);}
-#bar{flex:1;height:14px;background:rgba(124,250,255,0.12);border-radius:8px;overflow:hidden;border:1px solid rgba(124,250,255,.32);}
+#bar{flex:1;height:14px;background:rgba(255,215,0,0.12);border-radius:8px;overflow:hidden;border:1px solid rgba(255,215,0,.32);}
 #bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--cell),var(--ui));transition:width .18s ease;border-radius:8px;}
 #bar-txt{font-size:clamp(11px,2.9vw,16px);font-weight:800;color:var(--cell);font-variant-numeric:tabular-nums;min-width:44px;text-align:right;}
 #best{font-size:clamp(11px,2.8vw,15px);color:var(--textMuted);white-space:nowrap;}
 #best b{color:var(--combo);font-variant-numeric:tabular-nums;}
 /* ---------- 미로 (가운데) ---------- */
 #stage{flex:1 1 auto;position:relative;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(180deg,#0a0618,#050310);overflow:hidden;}
+  background:linear-gradient(180deg,#1a0f0a,#0d0704);overflow:hidden;}
 #cv{display:block;image-rendering:auto;}
 /* 러시아워 배너 */
 #rush-banner{
@@ -94,9 +99,9 @@ body{
 .icon-btn{
   width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;
   background:linear-gradient(180deg,var(--uiHover),var(--ui));color:#fff;font-size:20px;
-  display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 #7a1063;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 #6b3410;
 }
-.icon-btn:active{transform:translateY(2px);box-shadow:0 1px 0 #7a1063;}
+.icon-btn:active{transform:translateY(2px);box-shadow:0 1px 0 #6b3410;}
 #ctrl-hint{font-size:clamp(10px,2.7vw,14px);color:var(--textMuted);text-align:center;line-height:1.35;}
 /* ---------- 오버레이 ---------- */
 .overlay{
@@ -105,11 +110,11 @@ body{
   text-align:center;padding:24px;gap:13px;
 }
 .overlay.show{display:flex;}
-.overlay h1{font-size:clamp(30px,9vw,56px);color:var(--cell);text-shadow:0 0 16px rgba(255,46,199,.9),2px 3px 0 var(--ui);line-height:1.05;letter-spacing:2px;}
-.overlay h2{font-size:clamp(22px,6.5vw,40px);color:var(--cell);text-shadow:0 0 12px rgba(255,46,199,.7);}
+.overlay h1{font-size:clamp(30px,9vw,56px);color:var(--cell);text-shadow:0 0 16px rgba(139,90,43,.9),2px 3px 0 var(--wallEdge);line-height:1.05;letter-spacing:2px;}
+.overlay h2{font-size:clamp(22px,6.5vw,40px);color:var(--cell);text-shadow:0 0 12px rgba(139,90,43,.7);}
 .overlay .latin{font-size:clamp(12px,3.2vw,16px);color:var(--ui);letter-spacing:5px;font-weight:800;}
 .overlay .sub{font-size:clamp(13px,3.6vw,18px);color:var(--text);opacity:.92;line-height:1.5;}
-.overlay .big-emoji{font-size:clamp(52px,16vw,104px);line-height:1;filter:drop-shadow(0 6px 12px rgba(255,46,199,.4));}
+.overlay .big-emoji{font-size:clamp(52px,16vw,104px);line-height:1;filter:drop-shadow(0 6px 12px rgba(212,165,116,.45));}
 .overlay .stat{font-size:clamp(15px,4.2vw,22px);font-weight:700;}
 .overlay .stat b{color:var(--cell);}
 .overlay .best{font-size:clamp(13px,3.4vw,17px);color:var(--textMuted);}
@@ -117,20 +122,21 @@ body{
 .btn{
   margin-top:4px;padding:14px 34px;border:none;border-radius:40px;cursor:pointer;
   background:linear-gradient(180deg,var(--uiHover),var(--ui));color:#fff;
-  font-size:clamp(16px,4.6vw,22px);font-weight:800;letter-spacing:1px;box-shadow:0 5px 0 #7a1063;
+  font-size:clamp(16px,4.6vw,22px);font-weight:800;letter-spacing:1px;box-shadow:0 5px 0 #6b3410;
 }
-.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #7a1063;}
-.btn.alt{background:linear-gradient(180deg,#67d8ff,#1f9dff);box-shadow:0 5px 0 #0a5f8c;color:#04121f;}
-.btn.alt:active{box-shadow:0 2px 0 #0a5f8c;}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #6b3410;}
+/* 보조 버튼: 던전 돌-청록(마법 물약 느낌) */
+.btn.alt{background:linear-gradient(180deg,#7fb0d0,#3a6a8c);box-shadow:0 5px 0 #1d3a4c;color:#04121f;}
+.btn.alt:active{box-shadow:0 2px 0 #1d3a4c;}
 .btn:disabled{filter:grayscale(.8) brightness(.7);cursor:not-allowed;box-shadow:0 5px 0 #333;}
 .hint{font-size:clamp(11px,3vw,15px);color:var(--textMuted);line-height:1.7;margin-top:2px;text-align:left;}
-.hint kbd{background:rgba(255,46,199,.14);border:1px solid rgba(255,46,199,.35);border-radius:5px;padding:1px 7px;font-family:inherit;color:var(--text);}
+.hint kbd{background:rgba(212,165,116,.16);border:1px solid rgba(139,90,43,.45);border-radius:5px;padding:1px 7px;font-family:inherit;color:var(--text);}
 #menu-hint{display:flex;flex-direction:column;gap:6px;}
 .hrow{display:flex;align-items:center;gap:9px;}
 .hic{display:inline-flex;width:24px;flex:0 0 24px;justify-content:center;font-size:18px;}
 .hic img{width:22px;height:22px;image-rendering:pixelated;}
 #menu-hero img{width:58px;height:58px;image-rendering:pixelated;margin:0 4px;vertical-align:middle;}
-.credit{position:absolute;bottom:10px;font-size:11px;color:#5f4f80;}
+.credit{position:absolute;bottom:10px;font-size:11px;color:#6b5a3f;}
 .row-btn{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
 @media (orientation:landscape) and (max-height:520px){ #rotate{display:flex;} }
 #rotate .big-emoji{animation:spin 2.4s ease-in-out infinite;}
@@ -143,12 +149,12 @@ body{
   <!-- 상단 HUD -->
   <div id="hud">
     <div class="hud-row">
-      <div id="lives">🦊🦊🦊</div>
+      <div id="lives">❤️❤️❤️</div>
       <div id="combo">콤보 x2</div>
       <div id="score-wrap">점수 <b id="score">0</b></div>
     </div>
     <div class="hud-row cell-row">
-      <span id="cell-ic" class="ui-ic">⚡</span>
+      <span id="cell-ic" class="ui-ic">🪙</span>
       <div id="bar"><div id="bar-fill"></div></div>
       <div id="bar-txt">0/35</div>
       <div id="best"><span id="best-ic" class="ui-ic">🥇</span> <b id="best-val">0</b></div>
@@ -158,7 +164,7 @@ body{
   <!-- 미로 -->
   <div id="stage">
     <canvas id="cv"></canvas>
-    <div id="rush-banner">⏱️ 러시아워 5초</div>
+    <div id="rush-banner">⚔️ 각성! 5초</div>
   </div>
 
   <!-- 하단 컨트롤 -->
@@ -170,29 +176,29 @@ body{
 
   <!-- 오버레이: 메인 메뉴 -->
   <div class="overlay show" id="menu">
-    <div class="big-emoji" id="menu-hero">⚡🦊</div>
-    <h1>네온 프라울</h1>
-    <div class="latin">NEON PROWL</div>
-    <div class="sub">네온 미로 속 여우가 되어<br>에너지 셀을 모두 모으세요!</div>
+    <div class="big-emoji" id="menu-hero">⚔️🏰</div>
+    <h1>던전 프라울</h1>
+    <div class="latin">DUNGEON PROWL</div>
+    <div class="sub">고대 던전에 잠입한 용사가 되어<br>골드 코인을 모두 모으세요!</div>
     <div class="row-btn">
       <button class="btn" id="start-btn">플레이 ▶</button>
       <button class="btn alt" id="endless-btn" disabled>무한 모드 🔒</button>
     </div>
     <div class="best">최고 점수 <b id="menu-best">0</b> · 최고 레벨 <b id="menu-level">1</b></div>
     <div class="hint" id="menu-hint">
-      <div class="hrow"><span class="hic" data-ic="cell">⚡</span> 에너지 셀을 모두 모아 클리어</div>
-      <div class="hrow"><span class="hic" data-ic="ice">🧊</span> 아이스 큐브 → <b style="color:var(--cell)">에코 트레일</b>: 잔상에 닿은 적 스턴</div>
-      <div class="hrow"><span class="hic" data-ic="egg">🥚</span> 미스터리 에그 → 무작위 버프</div>
-      <div class="hrow"><span class="hic">⏱️</span> <b style="color:var(--rush)">러시아워</b>: 5초간 점수 3배</div>
+      <div class="hrow"><span class="hic" data-ic="cell">🪙</span> 골드 코인을 모두 모아 클리어</div>
+      <div class="hrow"><span class="hic" data-ic="ice">💧</span> 물웅덩이 → <b style="color:var(--cell)">에코 트레일</b>: 잔상에 닿은 적 스턴</div>
+      <div class="hrow"><span class="hic" data-ic="egg">📦</span> 보물 상자 → 무작위 버프</div>
+      <div class="hrow"><span class="hic">⚔️</span> <b style="color:var(--rush)">각성!</b>: 5초간 점수 3배</div>
       <div class="hrow"><span class="hic" data-ic="hunter">👁️</span> 적은 <b>시야</b>에 들어오면 추격 — 코너 뒤에 숨으세요</div>
     </div>
-    <div class="credit">v1.0 · 한국어</div>
+    <div class="credit">v2.0 · 던전 · 한국어</div>
   </div>
 
   <!-- 오버레이: 레벨 인트로 -->
   <div class="overlay" id="intro">
     <h1 id="intro-level">레벨 1</h1>
-    <div class="sub" id="intro-name">네온 골목</div>
+    <div class="sub" id="intro-name">어두운 입구</div>
   </div>
 
   <!-- 오버레이: 일시정지 -->
@@ -204,7 +210,7 @@ body{
 
   <!-- 오버레이: 레벨 클리어 -->
   <div class="overlay" id="clear">
-    <div class="big-emoji">🎉</div>
+    <div class="big-emoji">👑</div>
     <h2 id="clear-title">레벨 1 클리어!</h2>
     <div class="stat">획득 점수 <b id="clear-score">+0</b></div>
     <div class="stat">최고 콤보 <b id="clear-combo">x1</b></div>
@@ -213,7 +219,7 @@ body{
 
   <!-- 오버레이: 게임 오버 -->
   <div class="overlay" id="over">
-    <div class="big-emoji">🌌</div>
+    <div class="big-emoji">💀</div>
     <h2>게임 오버</h2>
     <div class="sub" id="over-reason">모든 목숨을 잃었습니다...</div>
     <div class="stat">최종 점수 <b id="over-score">0</b></div>
@@ -236,34 +242,39 @@ body{
 <script>
 "use strict";
 /* =======================================================================
-   네온 프라울 · NEON PROWL — README (개발자용)
+   던전 프라울 · DUNGEON PROWL — README (개발자용)
    -----------------------------------------------------------------------
+   · 테마: 던전 판타지(용사 · 골드 코인 · 보물 상자 · 횃불 던전).
+           네온 → 던전 개편으로 팔레트/네이밍/색상만 교체, 게임플레이 동일.
    · 조작: WASD / 방향키 / 스와이프 이동 · Esc·P 일시정지 · M 음소거
-   · 에셋: 외부 파일 없음(벡터 + 이모지 렌더). 단일 HTML 파일.
+   · 에셋: Kenney Tiny Dungeon 타일 + Roguelike Characters 시트(같은 폴더).
+           로드 실패 시 자동으로 벡터/이모지 폴백.
    · 밸런스 조정: 아래 CFG 객체 값 수정.
    · 세이브 초기화: localStorage.removeItem('neon_save') 후 새로고침.
    · 디버그: index.html?debug=1 로 열면 window.NP 훅 노출.
    -----------------------------------------------------------------------
    5가지 창작 트위스트(팩맨과 차별화 · IP 안전):
-     1) 에코 트레일  — 아이스 큐브 → 8초간 잔상 5개, 적이 닿으면 스턴(+점수).
+     1) 에코 트레일  — 물웅덩이 → 8초간 잔상 5개, 적이 닿으면 스턴(+점수).
                         ※ 적을 '먹는' 게 아니라 '함정'에 걸어 묶는다(핵심 차별점).
-     2) 러시아워    — 35초마다 5초간 모든 셀 점수 3배 + 템포 가속.
+     2) 각성!(러시)  — 35초마다 5초간 모든 코인 점수 3배 + 템포 가속.
      3) 시야 기반 AI — 적은 Patrol/Alert 2상태. 시야(레이캐스트)에 들면 추격.
      4) 콤보 체인   — 0.6초 내 연속 수집 시 배수 상승(최대 x5, 와일드카드 x10).
-     5) 미스터리 에그 — 셀 50% 수집 시 등장, 5가지 무작위 효과.
-   4종 적: 스위퍼(순찰) · 헌터(시야 원뿔) · 고스트(벽 통과) · 미믹(셀로 위장).
+     5) 보물 상자   — 코인 50% 수집 시 등장, 5가지 무작위 효과.
+   4종 적: 슬라임(순찰) · 오크(시야 원뿔) · 유령(벽 통과) · 미믹(코인으로 위장).
    ======================================================================= */
 (function(){
 /* =======================================================================
    0. 상수 / 팔레트 / 설정
    ======================================================================= */
+/* 던전 warm 팔레트 (네온 → 던전 전면 교체). 캔버스 렌더 전용 색상. */
 const COL = {
-  bg:'#0a0618', bgGrid:'#1a0f2e', wall:'#2d1b4e', wallEdge:'#ff2ec7', wallGlow:'#ff6be0',
-  floor:'#050310', cell:'#7cfaff', cellGlow:'#37e6ff', ice:'#a8f0ff', egg:'#ffb84d',
-  echo:'#37e6ff', danger:'#ff3ea5', combo:'#ffd93d', rush:'#ff6b6b',
-  text:'#e8d8ff', textMuted:'#a89dc8', ui:'#ff2ec7',
-  fox:'#ff8a3c', foxDark:'#e0641e', muzzle:'#ffe9d6', nose:'#2a1a2e', eye:'#160c26',
-  sweeper:'#8fb4e0', hunter:'#ff5a6e', ghost:'#b46bff', mimic:'#ff4fb0', stun:'#9aa0b4'
+  bg:'#1a0f0a', bgGrid:'#2a1810', wall:'#4a3020', wallEdge:'#8b5a2b', wallGlow:'#c8895a',
+  floor:'#17130f', cell:'#ffd700', cellGlow:'#ffb84d', ice:'#7fd0ff', egg:'#c084fc',
+  echo:'#7fd0ff', danger:'#dc2626', combo:'#ff9500', rush:'#dc2626',
+  text:'#f4e4bc', textMuted:'#a89076', ui:'#d4a574',
+  torch:'#ffb84d',                                        // 횃불빛(플리커/아우라)
+  fox:'#ff9d3c', foxDark:'#d47420', muzzle:'#ffe9d6', nose:'#2a1a2e', eye:'#160c26',
+  sweeper:'#7bd66b', hunter:'#e05a3c', ghost:'#cdd6e8', mimic:'#c084fc', stun:'#9aa0b4'
 };
 const CFG = {
   playerSpeed: 5.4,     // 셀/초 (고정)
@@ -290,12 +301,13 @@ const CFG = {
 const COMBO_NORMAL = [1, 1.5, 2, 3, 5];
 const COMBO_WILD   = [1, 1.5, 2, 3, 5, 7, 10];
 // 레벨 1~5 표 (트리스트 스펙)
+/* 레벨 이름: 던전 테마로 개편 (레이아웃/난이도 수치는 동일) */
 const LEVELS = [
-  {name:'네온 골목',    cols:11, rows:15, cells:35, ice:3, eggAt:0.5, enemies:{sweeper:2}},
-  {name:'베이퍼 그리드', cols:13, rows:17, cells:48, ice:4, eggAt:0.5, enemies:{sweeper:2,hunter:1}},
-  {name:'사이버 홀',    cols:13, rows:19, cells:58, ice:4, eggAt:0.5, enemies:{sweeper:2,hunter:1,ghost:1}},
-  {name:'회로 미로',    cols:15, rows:21, cells:72, ice:4, eggAt:0.5, enemies:{sweeper:2,hunter:2,ghost:1,mimic:1}},
-  {name:'네온 코어',    cols:15, rows:23, cells:85, ice:4, eggAt:0.3, enemies:{sweeper:3,hunter:2,ghost:1,mimic:2}}
+  {name:'어두운 입구',   cols:11, rows:15, cells:35, ice:3, eggAt:0.5, enemies:{sweeper:2}},
+  {name:'이끼 낀 회랑',  cols:13, rows:17, cells:48, ice:4, eggAt:0.5, enemies:{sweeper:2,hunter:1}},
+  {name:'지하 감옥',    cols:13, rows:19, cells:58, ice:4, eggAt:0.5, enemies:{sweeper:2,hunter:1,ghost:1}},
+  {name:'고대 유적',    cols:15, rows:21, cells:72, ice:4, eggAt:0.5, enemies:{sweeper:2,hunter:2,ghost:1,mimic:1}},
+  {name:'왕의 방',      cols:15, rows:23, cells:85, ice:4, eggAt:0.3, enemies:{sweeper:3,hunter:2,ghost:1,mimic:2}}
 ];
 const DIRS = [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}];
 
@@ -462,7 +474,7 @@ function levelConfig(n){
     if(en.sweeper>1)en.sweeper--; else if(en.hunter>1)en.hunter--; else if(en.mimic>1)en.mimic--; else if(en.ghost>1)en.ghost--; else break;
     total--;
   }
-  return {level:n, endless:true, name:'무한 지대', cols, rows, cells, ice:4, eggAt:0.3, enemies:en};
+  return {level:n, endless:true, name:'끝없는 심연', cols, rows, cells, ice:4, eggAt:0.3, enemies:en};
 }
 // 적 속도 배수: 아주 느리게 시작 → 점점 빨라짐 (스펙 공식, 1.5배 상한)
 function enemySpeedMult(level){ return Math.min(1.5, 0.85 + 0.05*level); }
@@ -570,9 +582,9 @@ function loadLevel(n){
   particles.length=0; floats.length=0; resetFX();
 
   // 별밭(배경)
-  stars=[]; const nStars=Math.floor(cols*rows*0.5);
+  stars=[]; const nStars=Math.floor(cols*rows*0.5);   // 던전 폴백 배경: 따뜻한 불티/먼지
   for(let i=0;i<nStars;i++) stars.push({x:rnd(cols),y:rnd(rows),r:0.4+rnd(1.0),ph:rnd(6.28),tw:1.3+rnd(2.3),
-    c: rnd()<0.6?'#e8d8ff':(rnd()<0.5?'#7cfaff':'#ff6be0')});
+    c: rnd()<0.6?'#f4e4bc':(rnd()<0.5?'#ffd700':'#c8895a')});
   computeView();
 
   // 레벨 인트로 표시
@@ -690,10 +702,10 @@ function update(dt){
   if(!REDUCE && (player.dir.x||player.dir.y)){ trailT-=dt;
     if(trailT<=0){ trailT=0.03; trail.push({x:player.x,y:player.y,life:0.26,max:0.26}); if(trail.length>14)trail.shift(); } }
 
-  // --- 수집: 에너지 셀 ---
+  // --- 수집: 골드 코인 ---
   for(let i=cells.length-1;i>=0;i--){ const c=cells[i];
     if(dist(player.x,player.y,c.x,c.y)<CFG.eatDist){ cells.splice(i,1); collectCell(c); } }
-  // --- 수집: 아이스 큐브 → 에코 트레일 ---
+  // --- 수집: 물웅덩이 → 에코 트레일 ---
   for(let i=ices.length-1;i>=0;i--){ const k=ices[i];
     if(dist(player.x,player.y,k.x,k.y)<CFG.eatDist){ ices.splice(i,1); activateEcho(); spawnPop(k.x,k.y,COL.ice); } }
 
@@ -800,7 +812,7 @@ function spawnEgg(){
   if(!cand.length) return;
   const c=cand[ri(cand.length)];
   egg={x:c.x,y:c.y,life:CFG.eggLifetime,t:0};
-  floatText(c.x,c.y,'🥚',COL.egg);
+  floatText(c.x,c.y,'📦',COL.egg);
 }
 function updateEgg(dt){
   if(!egg) return;
@@ -815,8 +827,8 @@ function applyEgg(){
   if(r<0.30){                       // 💰 골든 30%
     G.score+=500; G.levelScore+=500; banner('💰 골든!','+500 점');
     addFlash(COL.combo,0.45); floatText(ex,ey,'+500',COL.combo);
-  } else if(r<0.55){                // ⚡ 블리츠 25%
-    G.blitz=CFG.blitzDur; banner('⚡ 블리츠!','5초간 속도 2배');
+  } else if(r<0.55){                // ⚡ 질주(블리츠) 25%
+    G.blitz=CFG.blitzDur; banner('⚡ 질주!','5초간 속도 2배');
     addFlash(COL.cell,0.3);
   } else if(r<0.75){                // 💣 봄 20%
     banner('💣 봄!','주변 적 스턴');
@@ -932,17 +944,29 @@ const EMFONT='px system-ui,"Apple Color Emoji","Noto Color Emoji","Segoe UI Emoj
    · 타일: Tiny Dungeon (tile_XXXX.png, 16×16)
    · 캐릭터: Roguelike Characters 시트 (roguelikeChar_transparent.png, 16px+1 간격)
    로드 실패 시(파일 없음/CSP) 자동으로 기존 벡터·이모지 렌더로 폴백. */
+/* 던전 테마 타일 매핑 (Tiny Dungeon tile_XXXX.png · 16×16)
+   각 인덱스 근거:
+     cell:82   골드 코인 더미      egg:89   보물 상자(닫힘)
+     ice:116   파란 물약(물웅덩이)  sweeper:108 초록 슬라임
+     ghost:121 하얀 유령           mimic:92 이빨/혀 달린 미믹 상자
+     hunter:110 붉은 게(오크 폴백)  fox:96   은빛 기사(용사 폴백)
+     wall/2/3:57~59 회색 던전 석벽  floor~floor6:48~53 흙바닥 6종 */
 const SPRITE_MAP = {
-  hunter:110, ghost:108, mimic:92, cell:82, ice:116, egg:102, fox:109, sweeper:96,
-  wall:40, wall2:57, wall3:58, floor:48, floor2:49, floor3:50, floor4:51, floor5:52, floor6:53
+  fox:96, sweeper:108, hunter:110, ghost:121, mimic:92,
+  cell:82, ice:116, egg:89,
+  wall:57, wall2:58, wall3:59, floor:48, floor2:49, floor3:50, floor4:51, floor5:52, floor6:53
 };
 const SPR={};
 function tileFile(i){ return 'tile_'+String(i).padStart(4,'0')+'.png'; }
 (function loadSprites(){ for(const k in SPRITE_MAP){ const im=new Image(); im.src=tileFile(SPRITE_MAP[k]); SPR[k]=im; } })();
 function hasSpr(k){ const i=SPR[k]; return !!(i && i.complete && i.naturalWidth>0); }
-// 캐릭터 시트 (여우=주황 인물 0,5 · 스위퍼=은갑옷 기사 1,11)
+/* 캐릭터 시트 (Roguelike Characters · 54열×12행 · 16px+1 간격)
+   시트에는 인간형 캐릭터만 존재(0·1열이 완성 캐릭터)하므로 용사/오크만 배정하고
+   슬라임·유령·미믹은 위 Tiny Dungeon 크리처 타일로 렌더(더 테마 적합).
+     fox:[0,10]  용사 — 주황 머리 로그/모험가(teal 망토, 잠입 컨셉·대비 우수)
+     hunter:[0,3] 오크 — 초록 엄니 몬스터(추격형) */
 const CHAR=new Image(); CHAR.src='roguelikeChar_transparent.png';
-const CHAR_POS={ fox:[0,5], sweeper:[1,11] };
+const CHAR_POS={ fox:[0,10], hunter:[0,3] };
 function hasChar(){ return CHAR.complete && CHAR.naturalWidth>0; }
 // 벽·바닥·코인이 모두 로드되면 '던전 룩'(스프라이트) 모드
 function spriteWorld(){ return hasSpr('wall') && hasSpr('floor') && hasSpr('cell'); }
@@ -998,25 +1022,27 @@ function render(){
       ctx.globalAlpha=0.15+tw*0.5; ctx.fillStyle=s.c;
       ctx.beginPath(); ctx.arc(VIEW.ox+s.x*cs,VIEW.oy+s.y*cs,s.r*(0.6+tw*0.5),0,6.283); ctx.fill(); }
     ctx.globalAlpha=1;
-    // 벽 (2겹 네온: 어두운 채움 + 핫핑크 테두리 + 상단 하이라이트)
+    // 벽 폴백 (2겹 돌: 어두운 채움 + 횃불빛 테두리 + 상단 하이라이트)
     for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){
       if(!maze[y][x]) continue;
       const X=VIEW.ox+x*cs, Y=VIEW.oy+y*cs;
-      const wg=ctx.createLinearGradient(X,Y,X,Y+cs); wg.addColorStop(0,'#3a2263'); wg.addColorStop(1,COL.wall);
+      const wg=ctx.createLinearGradient(X,Y,X,Y+cs); wg.addColorStop(0,'#5a3a22'); wg.addColorStop(1,COL.wall);
       ctx.fillStyle=wg; roundRect(ctx,X+1,Y+1,cs-2,cs-2,cs*0.24); ctx.fill();
-      ctx.strokeStyle='rgba(255,46,199,0.55)'; ctx.lineWidth=1.6; roundRect(ctx,X+1.6,Y+1.6,cs-3.2,cs-3.2,cs*0.22); ctx.stroke();
-      ctx.fillStyle='rgba(255,107,224,0.12)'; roundRect(ctx,X+2.4,Y+2.4,cs-4.8,(cs-4.8)*0.38,cs*0.16); ctx.fill();
+      ctx.strokeStyle='rgba(139,90,43,0.6)'; ctx.lineWidth=1.6; roundRect(ctx,X+1.6,Y+1.6,cs-3.2,cs-3.2,cs*0.22); ctx.stroke();
+      ctx.fillStyle='rgba(200,137,90,0.14)'; roundRect(ctx,X+2.4,Y+2.4,cs-4.8,(cs-4.8)*0.38,cs*0.16); ctx.fill();
     }
   }
   ctx.textAlign='center'; ctx.textBaseline='middle';
   const bob0=Math.sin(G.time*4);
-  // 에너지 셀 (러시아워 시 2배 발광 + 펄스)
+  // 골드 코인 (각성 시 2배 발광 + 펄스) — 횃불 플리커 그림자
   for(const c of cells){
     const rush=G.rush>0, glow=0.5+0.5*Math.sin(G.time*(rush?12:5)+c.x+c.y);
     const X=px(c.x), Y=py(c.y)+bob0*cs*0.03;
     if(USPR && hasSpr('cell')){
-      if(rush){ ctx.fillStyle='rgba(255,107,107,'+(0.2+glow*0.3)+')'; ctx.beginPath(); ctx.arc(X,Y,cs*0.44,0,6.283); ctx.fill(); }
-      drawSpr('cell',X,Y,cs*0.62*(rush?1.18:1));
+      if(rush){ ctx.fillStyle='rgba(220,38,38,'+(0.2+glow*0.3)+')'; ctx.beginPath(); ctx.arc(X,Y,cs*0.44,0,6.283); ctx.fill(); }
+      // 횃불 플리커: 코인에 따뜻한 금빛 그림자 나부낌
+      ctx.save(); ctx.shadowBlur=8+Math.sin(G.time*4+c.x+c.y)*2; ctx.shadowColor=COL.torch;
+      drawSpr('cell',X,Y,cs*0.62*(rush?1.18:1)); ctx.restore();
     } else {
       const r=cs*(rush?0.27:0.22)*(rush?(1+0.12*glow):1);
       ctx.fillStyle=(rush?'rgba(255,107,107,':'rgba(55,230,255,')+(0.14+glow*(rush?0.34:0.18))+')';
@@ -1026,7 +1052,7 @@ function render(){
       ctx.fillStyle=gr; ctx.beginPath(); ctx.arc(X,Y,r,0,6.283); ctx.fill();
     }
   }
-  // 아이스 큐브 (파란 물약 스프라이트 / 얼음 다이아 폴백)
+  // 물웅덩이 (파란 물약 스프라이트 / 얼음 다이아 폴백)
   for(const k of ices){
     const X=px(k.x), Y=py(k.y)+bob0*cs*0.03, pl=0.5+0.5*Math.sin(G.time*4+k.x);
     if(USPR && hasSpr('ice')){
@@ -1041,18 +1067,22 @@ function render(){
       ctx.lineTo(X-r*0.5,Y+r*0.7); ctx.lineTo(X-r*0.72,Y-r*0.2); ctx.closePath(); ctx.fill(); ctx.stroke();
     }
   }
-  // 미스터리 에그
+  // 보물 상자
   if(egg){
     const blink=egg.life<3 && Math.floor(G.time*8)%2===0;
     if(!blink){ const X=px(egg.x), Y=py(egg.y)+Math.sin(egg.t*3)*cs*0.05, pl=0.5+0.5*Math.sin(G.time*4);
       ctx.save();
-      ctx.fillStyle='rgba(255,184,77,'+(0.18+pl*0.24)+')'; ctx.beginPath(); ctx.arc(X,Y,cs*0.42,0,6.283); ctx.fill();
-      if(USPR && hasSpr('egg')){ drawSpr('egg',X,Y,cs*0.68); }
+      // 보물 상자: 보라 마법 오라
+      ctx.fillStyle='rgba(192,132,252,'+(0.18+pl*0.24)+')'; ctx.beginPath(); ctx.arc(X,Y,cs*0.42,0,6.283); ctx.fill();
+      if(USPR && hasSpr('egg')){
+        ctx.shadowBlur=8+Math.sin(G.time*4)*2; ctx.shadowColor=COL.torch;   // 횃불 플리커
+        drawSpr('egg',X,Y,cs*0.68); ctx.shadowBlur=0;
+      }
       else { const r=cs*0.28;
         const gr=ctx.createRadialGradient(X-r*0.3,Y-r*0.4,r*0.2,X,Y,r*1.15);
         gr.addColorStop(0,'#fff4d6'); gr.addColorStop(0.6,'#ffcf6b'); gr.addColorStop(1,'#e08a2e');
         ctx.fillStyle=gr; ctx.beginPath(); ctx.ellipse(X,Y,r*0.82,r,0,0,6.283); ctx.fill();
-        ctx.font=Math.floor(cs*0.3)+EMFONT; ctx.fillText('🥚',X,Y+1); }
+        ctx.font=Math.floor(cs*0.3)+EMFONT; ctx.fillText('📦',X,Y+1); }
       ctx.restore(); }
   }
   // 잔상 (에코 트레일) — 오래될수록 옅게
@@ -1070,11 +1100,11 @@ function render(){
   ctx.globalAlpha=1;
   // 적
   for(const e of enemies) drawEnemy(e);
-  // 여우 추진 잔상
+  // 용사 추진 잔상
   for(const tr of trail){ const k=tr.life/tr.max; ctx.globalAlpha=k*0.35; ctx.fillStyle=COL.fox;
     ctx.beginPath(); ctx.arc(px(tr.x),py(tr.y),cs*0.26*k,0,6.283); ctx.fill(); }
   ctx.globalAlpha=1;
-  // 여우 (플레이어)
+  // 용사 (플레이어)
   drawPlayer();
   // 비네트 (위험/에코 시 색 변화)
   { const cx=VIEW.ox+cs*cols/2, cy=VIEW.oy+cs*rows/2, maxR=Math.hypot(cs*cols/2,cs*rows/2);
@@ -1111,7 +1141,7 @@ function render(){
     ctx.fillRect(0,0,VIEW.w,VIEW.h); ctx.globalAlpha=1; }
 }
 
-/* ---------- 여우 그리기 ---------- */
+/* ---------- 용사(스프라이트 폴백 벡터) 그리기 ---------- */
 function drawFoxShape(X,Y,r,opts){
   opts=opts||{};
   const dir=opts.dir||player.dir, faceLeft=dir.x<0;
@@ -1137,7 +1167,7 @@ function drawFoxShape(X,Y,r,opts){
     ctx.beginPath(); ctx.moveTo(r*0.5,-r*0.55); ctx.lineTo(r*0.4,-r*0.95); ctx.lineTo(r*0.2,-r*0.55); ctx.closePath(); ctx.fill(); }
   // 얼굴
   ctx.fillStyle=fur; ctx.beginPath(); ctx.arc(0,0,r*0.82,0,6.283); ctx.fill();
-  if(!opts.ghost){ ctx.strokeStyle='rgba(55,230,255,0.55)'; ctx.lineWidth=1.6; ctx.stroke(); }
+  if(!opts.ghost){ ctx.strokeStyle='rgba(139,90,43,0.5)'; ctx.lineWidth=1.6; ctx.stroke(); }
   // 흰 볼/주둥이
   ctx.fillStyle=muz; ctx.beginPath();
   ctx.moveTo(-r*0.52,-r*0.02); ctx.quadraticCurveTo(0,r*1.05,r*0.52,-r*0.02);
@@ -1147,7 +1177,7 @@ function drawFoxShape(X,Y,r,opts){
   const lookx=dir.x?0.1*r:(faceLeft?-0.08*r:0.08*r), looky=dir.y*0.12*r;
   ctx.fillStyle=COL.eye;
   ctx.beginPath(); ctx.arc(-r*0.3+lookx,-r*0.12+looky,r*0.14,0,6.283); ctx.arc(r*0.3+lookx,-r*0.12+looky,r*0.14,0,6.283); ctx.fill();
-  ctx.fillStyle='#7cfaff';
+  ctx.fillStyle='#ffd700';
   ctx.beginPath(); ctx.arc(-r*0.3+lookx+r*0.04,-r*0.15+looky,r*0.05,0,6.283); ctx.arc(r*0.3+lookx+r*0.04,-r*0.15+looky,r*0.05,0,6.283); ctx.fill();
   // 코
   ctx.fillStyle=COL.nose; ctx.beginPath(); ctx.arc(0,r*0.28,r*0.1,0,6.283); ctx.fill();
@@ -1159,6 +1189,11 @@ function drawPlayer(){
   const sq=player.sq>0?player.sq/0.1:0, horiz=Math.abs(player.dir.x)>=Math.abs(player.dir.y);
   let sx=1,sy=1; if(sq>0){ if(horiz){sx=1+0.15*sq;sy=1-0.15*sq;} else {sx=1-0.15*sq;sy=1+0.15*sq;} }
   const X=px(player.x), Y=py(player.y)+bob, opts={tilt:REDUCE?0:player.tilt, sx, sy, flip:player.dir.x<0};
+  // 용사 횃불 아우라: 따뜻한 금빛 방사광(살짝 플리커) — 던전 어둠 속 조명감
+  if(!REDUCE){ const fl=1+0.06*Math.sin(G.time*7), R=cs*1.55*fl;
+    const aura=ctx.createRadialGradient(X,Y,0,X,Y,R);
+    aura.addColorStop(0,'rgba(255,184,77,0.30)'); aura.addColorStop(0.5,'rgba(255,184,77,0.12)'); aura.addColorStop(1,'rgba(255,184,77,0)');
+    ctx.save(); ctx.fillStyle=aura; ctx.beginPath(); ctx.arc(X,Y,R,0,6.283); ctx.fill(); ctx.restore(); }
   if(spriteWorld() && (drawChar('fox',X,Y-cs*0.06,cs*0.98,opts) || drawSpr('fox',X,Y,cs*0.86,opts))) return;
   drawFoxShape(X, Y, cs*0.4, {tilt:REDUCE?0:player.tilt, sx, sy, dir:player.dir});
 }
@@ -1166,7 +1201,7 @@ function drawPlayer(){
 /* ---------- 적 그리기 ---------- */
 function drawEnemy(e){
   const cs=VIEW.cs, X=px(e.x), Y=py(e.y), r=cs*0.4, USPR=spriteWorld();
-  // 미믹 위장: 에너지 셀처럼 (스프라이트면 코인, 아니면 시안 오브)
+  // 미믹 위장: 골드 코인처럼 (스프라이트면 코인, 아니면 오브)
   if(e.type==='mimic' && e.state==='patrol'){
     const Ym=py(e.y)+Math.sin(G.time*4+e.x)*cs*0.03;
     if(USPR && hasSpr('cell')){ drawSpr('cell',X,Ym,cs*0.62); return; }
@@ -1178,14 +1213,20 @@ function drawEnemy(e){
     return;
   }
   const shake = e.revealT>0 ? (Math.random()*2-1)*cs*0.08 : 0, XX=X+shake, stunned=e.stun>0;
-  // 헌터 시야 원뿔(순찰 시 · 게임플레이 지표 → 두 모드 공통)
+  // 적 경계(alert) 시 붉은 위험 오라 — 네온 글로우 대체(#dc2626)
+  if(e.state==='alert' && !stunned){
+    const pl=0.5+0.5*Math.sin(G.time*9+e.x);
+    ctx.save(); ctx.fillStyle='rgba(220,38,38,'+(0.14+pl*0.16)+')';
+    ctx.beginPath(); ctx.arc(XX,Y,cs*0.6,0,6.283); ctx.fill(); ctx.restore();
+  }
+  // 헌터(오크) 시야 원뿔(순찰 시 · 게임플레이 지표 → 두 모드 공통)
   if(e.type==='hunter' && !stunned && e.state==='patrol') drawHunterCone(e,XX,Y);
   let drawn=false;
   if(USPR){
-    const o={flip:e.dir.x<0, alpha: stunned?0.5:(e.type==='ghost'?0.9:1)};
-    if(e.type==='sweeper') drawn = drawChar('sweeper',XX,Y-cs*0.06,cs*0.98,o) || drawSpr('sweeper',XX,Y,cs*0.82,o);
-    else { const bobp=(e.type==='ghost'&&!stunned)?Math.sin(e.t*3+e.bob)*cs*0.05:0;
-      drawn = drawSpr(e.type,XX,Y+bobp,cs*0.82,o); }
+    const bobp=(e.type==='ghost'&&!stunned)?Math.sin(e.t*3+e.bob)*cs*0.05:0;   // 유령 부유
+    const o={flip:e.dir.x<0, dir:e.dir, alpha: stunned?0.5:(e.type==='ghost'?0.85:1)};
+    // 캐릭터 시트(용사·오크) 우선 → 없으면 Tiny Dungeon 크리처 타일(슬라임·유령·미믹)
+    drawn = drawChar(e.type,XX,Y-cs*0.06,cs*0.98,o) || drawSpr(e.type,XX,Y+bobp,cs*0.82,o);
   }
   if(!drawn){
     ctx.save(); if(stunned) ctx.globalAlpha=0.85;
@@ -1214,7 +1255,7 @@ function drawSweeper(X,Y,r,st){
   ctx.fillStyle=st?COL.stun:COL.danger; ctx.beginPath(); ctx.arc(X,Y-r*0.98,r*0.12,0,6.283); ctx.fill();
   // 눈(스캐너)
   ctx.fillStyle='#0b1330'; roundRect(ctx,X-r*0.4,Y-r*0.18,r*0.8,r*0.34,r*0.16); ctx.fill();
-  ctx.fillStyle=st?'#c8ccd8':'#7cfaff'; ctx.beginPath(); ctx.arc(X,Y-r*0.01,r*0.1,0,6.283); ctx.fill();
+  ctx.fillStyle=st?'#c8ccd8':'#ffd700'; ctx.beginPath(); ctx.arc(X,Y-r*0.01,r*0.1,0,6.283); ctx.fill();
 }
 function drawHunter(e,X,Y,r,st){
   const c=st?COL.stun:COL.hunter;
@@ -1267,7 +1308,7 @@ function renderLives(){
     for(let i=0;i<n;i++) s+='<img class="pip" src="'+LIFE_URI+'">';
     for(let i=0;i<dim;i++) s+='<img class="pip dim" src="'+LIFE_URI+'">';
     el('lives').innerHTML=s;
-  } else el('lives').textContent='🦊'.repeat(n)+'·'.repeat(dim);
+  } else el('lives').textContent='❤️'.repeat(n)+'·'.repeat(dim);
 }
 function updateHUD(){
   renderLives();
@@ -1279,7 +1320,7 @@ function updateHUD(){
   el('bar-fill').style.width=pct+'%';
   el('bar-txt').textContent=G.got+'/'+G.need;
   el('best-val').textContent=SAVE.best.toLocaleString();
-  const rb=el('rush-banner'); if(G.rush>0) rb.textContent='⏱️ 러시아워 '+Math.ceil(G.rush)+'초';
+  const rb=el('rush-banner'); if(G.rush>0) rb.textContent='⚔️ 각성! '+Math.ceil(G.rush)+'초';
 }
 
 /* =======================================================================
@@ -1358,9 +1399,9 @@ document.addEventListener('visibilitychange',()=>{ if(document.hidden && G.state
    18b. UI 아이콘 스프라이트 (HUD·메뉴 · 로드 실패 시 이모지 유지)
    ======================================================================= */
 let LIFE_URI=null;
-function computeLifeURI(){ LIFE_URI=null;
+function computeLifeURI(){ LIFE_URI=null;   // 라이프/메뉴용 용사 아이콘: 캐릭터 시트 [0,10]
   try{ if(hasChar()){ const c=document.createElement('canvas'); c.width=32; c.height=32;
-    const g=c.getContext('2d'); g.imageSmoothingEnabled=false; g.drawImage(CHAR,0,5*17,16,16,0,0,32,32);
+    const g=c.getContext('2d'); g.imageSmoothingEnabled=false; g.drawImage(CHAR,0*17,10*17,16,16,0,0,32,32);
     LIFE_URI=c.toDataURL(); } }catch(e){ LIFE_URI=null; } }
 function setIcon(node, tile, emoji, size){
   const im=new Image(); im.width=size; im.height=size;
@@ -1375,14 +1416,15 @@ function buildMenuHero(){
     im.style.cssText='image-rendering:pixelated;vertical-align:middle;margin:0 4px';
     im.onload=()=>host.appendChild(im); im.onerror=()=>{ const s=document.createElement('span'); s.textContent=fb; host.appendChild(s); };
     im.src=src; };
-  add(tileFile(82),52,'⚡');
-  if(LIFE_URI) add(LIFE_URI,58,'🦊'); else add(tileFile(109),52,'🦊');
+  // 용사 + 골드 코인 (스프라이트 실패 시 ⚔️/🪙 이모지)
+  if(LIFE_URI) add(LIFE_URI,58,'⚔️'); else add(tileFile(SPRITE_MAP.fox),52,'⚔️');
+  add(tileFile(SPRITE_MAP.cell),52,'🪙');
 }
 function setupIcons(){
   computeLifeURI();
-  setIcon(el('cell-ic'),82,'⚡',18);
-  setIcon(el('best-ic'),101,'🥇',18);
-  const MAP={cell:82, ice:116, egg:102, hunter:110};
+  setIcon(el('cell-ic'),SPRITE_MAP.cell,'🪙',18);   // HUD 코인 아이콘
+  // best-ic 는 🥇 이모지 유지(별도 타일 없음)
+  const MAP={cell:SPRITE_MAP.cell, ice:SPRITE_MAP.ice, egg:SPRITE_MAP.egg};  // hunter 는 👁️ 유지
   document.querySelectorAll('#menu-hint .hic[data-ic]').forEach(sp=>{
     const t=MAP[sp.dataset.ic]; if(t!=null) setIcon(sp,t,sp.textContent.trim(),22);
   });
@@ -1424,7 +1466,7 @@ if(location.search.indexOf('debug')>=0){
     echo(){ activateEcho(); }, rush(){ startRush(); }, dropEgg(){ spawnEgg(); },
     giveWild(){ G.wildcard=CFG.wildcardDur; }, level(n){ newRun(n); }
   };
-  console.log('[NEON PROWL] 디버그 훅 window.NP 활성화');
+  console.log('[DUNGEON PROWL] 디버그 훅 window.NP 활성화');
 }
 
 })();
